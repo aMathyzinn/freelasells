@@ -1,143 +1,710 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Freela Sells - Freelance Informal no Discord</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-<style>
-:root{--primary:#00d1b2;--secondary:#209cee;--accent:#ff3860;--dark:#1a1a1a;--light:#f5f5f5;--text:#e0e0e0;--bg-gradient:linear-gradient(135deg,#141414,#1f1f1f);}*{margin:0;padding:0;box-sizing:border-box;}body{font-family:'Montserrat',sans-serif;background:var(--bg-gradient);color:var(--text);overflow-x:hidden;line-height:1.6;}#loading{position:fixed;top:0;left:0;width:100vw;height:100vh;background:var(--dark);display:flex;align-items:center;justify-content:center;z-index:3000;}#loading .spinner{border:8px solid var(--secondary);border-top:8px solid var(--primary);border-radius:50%;width:60px;height:60px;animation:spin 1s linear infinite;}@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}.nav{position:fixed;top:0;width:100%;padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;background:rgba(26,26,26,0.95);backdrop-filter:blur(10px);z-index:2000;}.nav-logo{font-size:1.75rem;font-weight:700;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}.nav-links{display:flex;gap:2rem;}.nav-link{color:var(--text);text-decoration:none;font-weight:500;transition:color 0.3s;position:relative;}.nav-link::after{content:'';position:absolute;width:0%;height:2px;background:var(--primary);left:0;bottom:-4px;transition:width 0.3s;}.nav-link:hover{color:var(--primary);}.nav-link:hover::after{width:100%;}@media (max-width:768px){.nav-links{display:none;}}.hero{height:100vh;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;}.hero #particles-js{position:absolute;width:100%;height:100%;z-index:1;}.hero-content{position:relative;z-index:2;padding:2rem;max-width:800px;} .hero-content h1{font-size:4rem;margin-bottom:1rem;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}.hero-content p{font-size:1.25rem;margin-bottom:1.5rem;}.btn{padding:0.75rem 1.5rem;border:none;background:var(--primary);color:var(--light);border-radius:50px;cursor:pointer;font-weight:600;transition:background 0.3s;}.btn:hover{background:var(--secondary);}@media (max-width:768px){.hero-content h1{font-size:2.5rem;}.hero-content p{font-size:1rem;}} section{padding:6rem 2rem;position:relative;z-index:2;}.section-title{text-align:center;margin-bottom:3rem;font-size:2.75rem;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}.section-subtitle{text-align:center;margin-bottom:2rem;font-size:1.25rem;color:var(--text);} .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;}.service-card{background:rgba(255,255,255,0.05);padding:2rem;border-radius:15px;backdrop-filter:blur(10px);transition:transform 0.3s,background 0.3s;cursor:pointer;position:relative;overflow:hidden;}.service-card:hover{transform:translateY(-10px);background:rgba(255,255,255,0.1);} .service-card i{font-size:3rem;margin-bottom:1rem;color:var(--primary);} .service-card h3{margin-bottom:0.75rem;font-size:1.5rem;} .service-card p{font-size:0.95rem;line-height:1.4;} .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;} .info-card{background:rgba(255,255,255,0.05);padding:2rem;border-left:4px solid var(--primary);border-radius:8px;backdrop-filter:blur(10px);} .info-card h3{margin-bottom:1rem;font-size:1.5rem;color:var(--primary);} .info-card p{font-size:1rem;line-height:1.6;} .about-content,.testimonials-grid{max-width:1000px;margin:0 auto;} .about-content p{margin-bottom:1rem;font-size:1.1rem;} .testimonial{background:rgba(255,255,255,0.05);padding:1.5rem;border-radius:15px;text-align:center;backdrop-filter:blur(10px);transition:transform 0.3s;} .testimonial:hover{transform:scale(1.03);} .testimonial p{font-style:italic;margin-bottom:1rem;} .testimonial h4{font-weight:600;margin-bottom:0.25rem;} .testimonial span{font-size:0.9rem;color:var(--secondary);} .contact-card{max-width:600px;margin:0 auto;background:rgba(255,255,255,0.05);padding:2rem;border-radius:15px;backdrop-filter:blur(10px);text-align:center;} .contact-card a{color:var(--primary);text-decoration:none;border-bottom:1px solid var(--primary);transition:color 0.3s,border-color 0.3s;} .contact-card a:hover{color:var(--accent);border-color:var(--accent);} footer{background:rgba(26,26,26,0.95);padding:2rem;text-align:center;color:var(--text);} footer p{font-size:0.9rem;} .floating{animation:float 4s ease-in-out infinite;} @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Freela Sells - Freelance Informal no Discord</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <style>
+    :root {
+      --primary: #00d1b2;
+      --secondary: #209cee;
+      --accent: #ff3860;
+      --dark: #1a1a1a;
+      --light: #f5f5f5;
+      --text: #e0e0e0;
+      --bg-gradient: linear-gradient(135deg, #141414, #1f1f1f);
+      --card-bg: rgba(255, 255, 255, 0.05);
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    /* Loading Screen */
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+    }
+    #loading .spinner {
+      border: 8px solid var(--secondary);
+      border-top: 8px solid var(--primary);
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* Navegação */
+    .nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(26, 26, 26, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 2000;
+    }
+    .nav-logo {
+      font-size: clamp(1.5rem, 3vw, 1.75rem);
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    .nav-link {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      background: var(--primary);
+      left: 0;
+      bottom: -4px;
+      transition: width 0.3s;
+    }
+    .nav-link:hover {
+      color: var(--primary);
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    /* Ícone Hamburger (inicialmente oculto) */
+    .hamburger {
+      display: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: var(--text);
+    }
+    /* Popup do Menu Mobile */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.9);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2500;
+    }
+    .mobile-menu a {
+      color: var(--light);
+      font-size: 1.5rem;
+      text-decoration: none;
+      margin: 1rem;
+      transition: color 0.3s;
+    }
+    .mobile-menu a:hover {
+      color: var(--primary);
+    }
+    .mobile-menu-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      font-size: 2rem;
+      color: var(--light);
+      cursor: pointer;
+    }
+    /* Ocultar menu tradicional para mobile */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      .hamburger {
+        display: block;
+      }
+    }
+    /* Hero */
+    .hero {
+      height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero #particles-js {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 2rem;
+      max-width: 800px;
+    }
+    .hero-content h1 {
+      font-size: clamp(2rem, 8vw, 4rem);
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 10px rgba(0, 209, 178, 0.7);
+    }
+    .hero-content p {
+      font-size: clamp(1rem, 4vw, 1.25rem);
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 8px rgba(0,0,0,0.3);
+    }
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      background: var(--primary);
+      color: var(--light);
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .btn:hover {
+      background: var(--secondary);
+      box-shadow: 0 0 15px var(--secondary);
+    }
+    @media (max-width: 768px) {
+      .hero-content h1 { font-size: clamp(2rem, 8vw, 3rem); }
+      .hero-content p { font-size: clamp(0.9rem, 3vw, 1rem); }
+    }
+    /* Seções */
+    section {
+      padding: 6rem 2rem;
+      position: relative;
+      z-index: 2;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 3rem;
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .section-subtitle {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: clamp(1rem, 3vw, 1.25rem);
+      color: var(--text);
+    }
+    /* Cards de Serviço */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: clamp(1rem, 2vw, 2rem);
+      padding: 0 1rem;
+      justify-content: center; /* Centraliza os itens na última linha */
+    }
+    .service-card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .service-card:hover {
+      transform: translateY(-10px);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+    }
+    .service-card::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.15), transparent);
+      transform: rotate(45deg);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .service-card:hover::before {
+      opacity: 1;
+    }
+    .service-card i {
+      font-size: clamp(2rem, 6vw, 3rem);
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+    .service-card h3 {
+      margin-bottom: 0.75rem;
+      font-size: 1.5rem;
+    }
+    .service-card p {
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+    /* Cards de Informações */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+    .info-card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-left: 4px solid var(--primary);
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+    }
+    .info-card h3 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+    .info-card p {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+    /* Seção About e Testemunhos */
+    .about-content,
+    .testimonials-grid {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .about-content p {
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+    .testimonial {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: 15px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .testimonial:hover {
+      transform: scale(1.03);
+      box-shadow: 0 15px 25px rgba(0,0,0,0.3);
+    }
+    .testimonial p {
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+    .testimonial h4 {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    .testimonial span {
+      font-size: 0.9rem;
+      color: var(--secondary);
+    }
+    /* Contato */
+    .contact-card {
+      max-width: 600px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+    }
+    .contact-card a {
+      color: var(--primary);
+      text-decoration: none;
+      border-bottom: 1px solid var(--primary);
+      transition: color 0.3s, border-color 0.3s;
+    }
+    .contact-card a:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    /* Rodapé */
+    footer {
+      background: rgba(26, 26, 26, 0.95);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text);
+    }
+    footer p {
+      font-size: 0.9rem;
+    }
+    /* Efeito flutuante */
+    .floating {
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    /* Responsividade Extra: para telas muito pequenas e telas grandes */
+    @media (max-width: 480px) {
+      .nav { padding: 1rem; }
+      section { padding: 4rem 1rem; }
+    }
+    @media (min-width: 1200px) {
+      .services-grid { gap: 2rem; }
+      .info-grid { gap: 2rem; }
+    }
+  </style>
 </head>
 <body>
-<div id="loading"><div class="spinner"></div></div>
-<nav class="nav">
-<div class="nav-logo">Freela Sells</div>
-<div class="nav-links">
-<a href="#servicos" class="nav-link">Serviços</a>
-<a href="#sobre" class="nav-link">Sobre</a>
-<a href="#como-funciona" class="nav-link">Como Funciona</a>
-<a href="#testemunhos" class="nav-link">Testemunhos</a>
-<a href="#contato" class="nav-link">Contato</a>
-</div>
-</nav>
-<section class="hero">
-<div id="particles-js"></div>
-<div class="hero-content" data-aos="fade-up">
-<h1>Freela Sells</h1>
-<p>Conectando talentos extraordinários a oportunidades incríveis no Discord.</p>
-<button class="btn" onclick="document.querySelector('#contato').scrollIntoView({behavior:'smooth'})">Junte-se a Nós</button>
-</div>
-</section>
-<section id="servicos">
-<h2 class="section-title" data-aos="fade-up">Nossos Serviços</h2>
-<p class="section-subtitle" data-aos="fade-up" data-aos-delay="200">De otimização de computadores a design gráfico, oferecemos soluções completas para seus desafios.</p>
-<div class="services-grid">
-<div class="service-card floating" data-aos="fade-up">
-<i class="fas fa-desktop"></i>
-<h3>Otimização de Computadores</h3>
-<p>Melhore o desempenho do seu equipamento com técnicas avançadas e suporte especializado.</p>
-</div>
-<div class="service-card floating" data-aos="fade-up" data-aos-delay="100">
-<i class="fas fa-pen-nib"></i>
-<h3>Ilustração Vetorial</h3>
-<p>Arte digital com alta qualidade e precisão, ideal para marcas e projetos criativos.</p>
-</div>
-<div class="service-card floating" data-aos="fade-up" data-aos-delay="200">
-<i class="fas fa-palette"></i>
-<h3>Design Gráfico</h3>
-<p>Criação de thumbnails, portraits e projetos gráficos que elevam sua identidade visual.</p>
-</div>
-<div class="service-card floating" data-aos="fade-up" data-aos-delay="300">
-<i class="fas fa-code"></i>
-<h3>WebDesign</h3>
-<p>Desenvolvimento de sites modernos, responsivos e com uma experiência única de usuário.</p>
-</div>
-<div class="service-card floating" data-aos="fade-up" data-aos-delay="400">
-<i class="fas fa-video"></i>
-<h3>Edição de Vídeo</h3>
-<p>Edições dinâmicas e criativas para transformar seus vídeos em verdadeiras obras de arte.</p>
-</div>
-<div class="service-card floating" data-aos="fade-up" data-aos-delay="500">
-<i class="fas fa-laptop-code"></i>
-<h3>Programação</h3>
-<p>Desenvolvimento de soluções personalizadas para otimizar seus processos e negócios.</p>
-</div>
-<div class="service-card floating" data-aos="fade-up" data-aos-delay="600">
-<i class="fas fa-layer-group"></i>
-<h3>Interfaces Modernas</h3>
-<p>Criamos interfaces intuitivas e elegantes que proporcionam uma experiência de uso impecável.</p>
-</div>
-</div>
-</section>
-<section id="sobre">
-<h2 class="section-title" data-aos="fade-up">Sobre a Freela Sell's</h2>
-<div class="about-content" data-aos="fade-up" data-aos-delay="200">
-<p>A Freela Sell's é mais do que uma simples plataforma – é um ponto de encontro para designers, freelancers, clientes e profissionais de diversas áreas se conectarem e realizarem projetos inovadores.</p>
-<p>Somos uma comunidade vibrante e dedicada, empenhada em oferecer serviços de alta qualidade e atendimento personalizado. Nossa missão é liderar o mercado de freelance "informal" no Discord, conectando talentos de todo o mundo e proporcionando experiências transformadoras.</p>
-</div>
-</section>
-<section id="como-funciona">
-<h2 class="section-title" data-aos="fade-up">Como Funciona</h2>
-<div class="info-grid">
-<div class="info-card" data-aos="fade-up">
-<h3>Equipe Dedicada</h3>
-<p>Nossa equipe especializada atua como elo entre você e os melhores profissionais. Conosco, seu projeto é tratado com atenção e expertise.</p>
-</div>
-<div class="info-card" data-aos="fade-up" data-aos-delay="150">
-<h3>Interação Simplificada</h3>
-<p>Converse diretamente com nossos profissionais através dos chats dedicados no Discord. Sem burocracia, sem complicações.</p>
-</div>
-<div class="info-card" data-aos="fade-up" data-aos-delay="300">
-<h3>Segurança e Sigilo</h3>
-<p>Com o respaldo do Grupo aMathyzin, garantimos que todas as transações sejam protegidas, mantendo seus dados em total sigilo.</p>
-</div>
-</div>
-</section>
-<section id="testemunhos">
-<h2 class="section-title" data-aos="fade-up">O Que Dizem Nossos Clientes</h2>
-<p class="section-subtitle" data-aos="fade-up" data-aos-delay="200">Depoimentos reais de clientes que transformaram suas ideias em realidade com a gente.</p>
-<div class="testimonials-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem;">
-<div class="testimonial" data-aos="fade-up">
-<p>"A Freela Sell's me conectou com profissionais incríveis que levaram meu projeto para o próximo nível. Atendimento rápido e de altíssima qualidade!"</p>
-<h4>Mariana Silva</h4>
-<span>Empreendedora Digital</span>
-</div>
-<div class="testimonial" data-aos="fade-up" data-aos-delay="150">
-<p>"Nunca imaginei encontrar uma comunidade tão dinâmica e profissional no Discord. Recomendo a todos que buscam inovação e criatividade."</p>
-<h4>Rafael Costa</h4>
-<span>Designer Gráfico</span>
-</div>
-<div class="testimonial" data-aos="fade-up" data-aos-delay="300">
-<p>"A abordagem direta e sem burocracia fez toda a diferença. Meu serviço foi entregue com excelência e segurança. Estou muito satisfeito!"</p>
-<h4>Luana Pereira</h4>
-<span>Empresária</span>
-</div>
-</div>
-</section>
-<section id="contato">
-<h2 class="section-title" data-aos="fade-up">Entre em Contato</h2>
-<div class="contact-card" data-aos="fade-up" data-aos-delay="200">
-<p>Quer saber mais, negociar um serviço ou simplesmente bater um papo? Fale conosco através do nosso Discord ou envie um e-mail.</p>
-<p><i class="fab fa-discord"></i> <a href="https://discord.gg/seulink" target="_blank">Acesse nosso Discord</a></p>
-<p><i class="fas fa-envelope"></i> <a href="mailto:contato@freelasells.com">contato@freelasells.com</a></p>
-</div>
-</section>
-<footer>
-<p>&copy; 2025 Freela Sells. Todos os direitos reservados.</p>
-<p>Desenvolvido com paixão e dedicação pelo Grupo aMathyzin.</p>
-</footer>
-<script>
-window.addEventListener('load',()=>{gsap.to('#loading',{opacity:0,duration:0.5,onComplete:()=>{document.getElementById('loading').style.display='none'}});AOS.init({duration:1000,once:true});});
-particlesJS("particles-js",{"particles":{"number":{"value":80,"density":{"enable":true,"value_area":800}},"color":{"value":"#ffffff"},"shape":{"type":"circle","stroke":{"width":0,"color":"#000000"},"polygon":{"nb_sides":5}},"opacity":{"value":0.5,"random":false},"size":{"value":3,"random":true},"line_linked":{"enable":true,"distance":150,"color":"#ffffff","opacity":0.4,"width":1},"move":{"enable":true,"speed":2,"direction":"none","random":false,"straight":false,"bounce":false}},"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":true,"mode":"grab"},"onclick":{"enable":true,"mode":"push"},"resize":true},"modes":{"grab":{"distance":140,"line_linked":{"opacity":1}},"push":{"particles_nb":4}}},"retina_detect":true});
-document.querySelectorAll('.service-card').forEach(card=>{card.addEventListener('mousemove',e=>{let rect=card.getBoundingClientRect();let x=e.clientX-rect.left;let y=e.clientY-rect.top;card.style.transform=`perspective(1000px) rotateX(${(y-rect.height/2)/10}deg) rotateY(${-(x-rect.width/2)/10}deg)`});card.addEventListener('mouseleave',()=>{card.style.transform='perspective(1000px) rotateX(0) rotateY(0)';});});
-</script>
+  <!-- Loading Screen -->
+  <div id="loading">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Navegação -->
+  <nav class="nav">
+    <div class="nav-logo">Freela Sells</div>
+    <div class="nav-links">
+      <a href="#servicos" class="nav-link">Serviços</a>
+      <a href="#sobre" class="nav-link">Sobre</a>
+      <a href="#como-funciona" class="nav-link">Como Funciona</a>
+      <a href="#testemunhos" class="nav-link">Testemunhos</a>
+      <a href="#contato" class="nav-link">Contato</a>
+    </div>
+    <!-- Ícone de menu para mobile -->
+    <div class="hamburger">
+      <i class="fas fa-bars"></i>
+    </div>
+  </nav>
+
+  <!-- Popup do Menu Mobile -->
+  <div id="mobile-menu" class="mobile-menu">
+    <div class="mobile-menu-close">
+      <i class="fas fa-times"></i>
+    </div>
+    <a href="#servicos" class="nav-link">Serviços</a>
+    <a href="#sobre" class="nav-link">Sobre</a>
+    <a href="#como-funciona" class="nav-link">Como Funciona</a>
+    <a href="#testemunhos" class="nav-link">Testemunhos</a>
+    <a href="#contato" class="nav-link">Contato</a>
+  </div>
+
+  <!-- Seção Hero -->
+  <section class="hero">
+    <div id="particles-js"></div>
+    <div class="hero-content" data-aos="fade-up">
+      <h1>Freela Sells</h1>
+      <p>Conectando talentos extraordinários a oportunidades incríveis no Discord.</p>
+      <button class="btn" onclick="document.querySelector('#contato').scrollIntoView({behavior:'smooth'})">
+        Junte-se a Nós
+      </button>
+    </div>
+  </section>
+
+  <!-- Seção de Serviços -->
+  <section id="servicos">
+    <h2 class="section-title" data-aos="fade-up">Nossos Serviços</h2>
+    <p class="section-subtitle" data-aos="fade-up" data-aos-delay="200">
+      De otimização de computadores a design gráfico, oferecemos soluções completas para seus desafios.
+    </p>
+    <div class="services-grid">
+      <div class="service-card floating" data-aos="fade-up">
+        <i class="fas fa-desktop"></i>
+        <h3>Otimização de Computadores</h3>
+        <p>Melhore o desempenho do seu equipamento com técnicas avançadas e suporte especializado.</p>
+      </div>
+      <div class="service-card floating" data-aos="fade-up" data-aos-delay="100">
+        <i class="fas fa-pen-nib"></i>
+        <h3>Ilustração Vetorial</h3>
+        <p>Arte digital com alta qualidade e precisão, ideal para marcas e projetos criativos.</p>
+      </div>
+      <div class="service-card floating" data-aos="fade-up" data-aos-delay="200">
+        <i class="fas fa-palette"></i>
+        <h3>Design Gráfico</h3>
+        <p>Criação de thumbnails, portraits e projetos gráficos que elevam sua identidade visual.</p>
+      </div>
+      <div class="service-card floating" data-aos="fade-up" data-aos-delay="300">
+        <i class="fas fa-code"></i>
+        <h3>WebDesign</h3>
+        <p>Desenvolvimento de sites modernos, responsivos e com uma experiência única de usuário.</p>
+      </div>
+      <div class="service-card floating" data-aos="fade-up" data-aos-delay="400">
+        <i class="fas fa-video"></i>
+        <h3>Edição de Vídeo</h3>
+        <p>Edições dinâmicas e criativas para transformar seus vídeos em verdadeiras obras de arte.</p>
+      </div>
+      <div class="service-card floating" data-aos="fade-up" data-aos-delay="500">
+        <i class="fas fa-laptop-code"></i>
+        <h3>Programação</h3>
+        <p>Desenvolvimento de soluções personalizadas para otimizar seus processos e negócios.</p>
+      </div>
+      <div class="service-card floating" data-aos="fade-up" data-aos-delay="600">
+        <i class="fas fa-layer-group"></i>
+        <h3>Interfaces Modernas</h3>
+        <p>Criamos interfaces intuitivas e elegantes que proporcionam uma experiência de uso impecável.</p>
+      </div>
+      <!-- Último Card: Caso a última linha tenha menos itens, ficará centralizado -->
+      <div class="service-card floating" data-aos="fade-up" data-aos-delay="700">
+        <i class="fas fa-comments"></i>
+        <h3>Consultoria e Suporte</h3>
+        <p>Conte com nossa consultoria personalizada para impulsionar seus projetos e solucionar desafios.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção Sobre -->
+  <section id="sobre">
+    <h2 class="section-title" data-aos="fade-up">Sobre a Freela Sell's</h2>
+    <div class="about-content" data-aos="fade-up" data-aos-delay="200">
+      <p>
+        A Freela Sell's é mais do que uma simples plataforma – é um ponto de encontro para designers, freelancers, clientes e profissionais de diversas áreas se conectarem e realizarem projetos inovadores.
+      </p>
+      <p>
+        Somos uma comunidade vibrante e dedicada, empenhada em oferecer serviços de alta qualidade e atendimento personalizado. Nossa missão é liderar o mercado de freelance "informal" no Discord, conectando talentos de todo o mundo e proporcionando experiências transformadoras.
+      </p>
+    </div>
+  </section>
+
+  <!-- Seção Como Funciona -->
+  <section id="como-funciona">
+    <h2 class="section-title" data-aos="fade-up">Como Funciona</h2>
+    <div class="info-grid">
+      <div class="info-card" data-aos="fade-up">
+        <h3>Equipe Dedicada</h3>
+        <p>
+          Nossa equipe especializada atua como elo entre você e os melhores profissionais. Conosco, seu projeto é tratado com atenção e expertise.
+        </p>
+      </div>
+      <div class="info-card" data-aos="fade-up" data-aos-delay="150">
+        <h3>Interação Simplificada</h3>
+        <p>
+          Converse diretamente com nossos profissionais através dos chats dedicados no Discord. Sem burocracia, sem complicações.
+        </p>
+      </div>
+      <div class="info-card" data-aos="fade-up" data-aos-delay="300">
+        <h3>Segurança e Sigilo</h3>
+        <p>
+          Com o respaldo do Grupo aMathyzin, garantimos que todas as transações sejam protegidas, mantendo seus dados em total sigilo.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção Testemunhos -->
+  <section id="testemunhos">
+    <h2 class="section-title" data-aos="fade-up">O Que Dizem Nossos Clientes</h2>
+    <p class="section-subtitle" data-aos="fade-up" data-aos-delay="200">
+      Depoimentos reais de clientes que transformaram suas ideias em realidade com a gente.
+    </p>
+    <div class="testimonials-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+      <div class="testimonial" data-aos="fade-up">
+        <p>
+          "A Freela Sell's me conectou com profissionais incríveis que levaram meu projeto para o próximo nível. Atendimento rápido e de altíssima qualidade!"
+        </p>
+        <h4>Mariana Silva</h4>
+        <span>Empreendedora Digital</span>
+      </div>
+      <div class="testimonial" data-aos="fade-up" data-aos-delay="150">
+        <p>
+          "Nunca imaginei encontrar uma comunidade tão dinâmica e profissional no Discord. Recomendo a todos que buscam inovação e criatividade."
+        </p>
+        <h4>Rafael Costa</h4>
+        <span>Designer Gráfico</span>
+      </div>
+      <div class="testimonial" data-aos="fade-up" data-aos-delay="300">
+        <p>
+          "A abordagem direta e sem burocracia fez toda a diferença. Meu serviço foi entregue com excelência e segurança. Estou muito satisfeito!"
+        </p>
+        <h4>Luana Pereira</h4>
+        <span>Empresária</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção Contato -->
+  <section id="contato">
+    <h2 class="section-title" data-aos="fade-up">Entre em Contato</h2>
+    <div class="contact-card" data-aos="fade-up" data-aos-delay="200">
+      <p>
+        Quer saber mais, negociar um serviço ou simplesmente bater um papo? Fale conosco através do nosso Discord ou envie um e-mail.
+      </p>
+      <p>
+        <i class="fab fa-discord"></i> <a href="https://discord.gg/seulink" target="_blank">Acesse nosso Discord</a>
+      </p>
+      <p>
+        <i class="fas fa-envelope"></i> <a href="mailto:contato@freelasells.com">contato@freelasells.com</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Rodapé -->
+  <footer>
+    <p>&copy; 2025 Freela Sells. Todos os direitos reservados.</p>
+    <p>Desenvolvido com paixão e dedicação pelo Grupo aMathyzin.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    window.addEventListener('load', () => {
+      gsap.to('#loading', {
+        opacity: 0,
+        duration: 0.5,
+        onComplete: () => {
+          document.getElementById('loading').style.display = 'none';
+        }
+      });
+      AOS.init({
+        duration: 1000,
+        once: true
+      });
+    });
+
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {
+          "value": 80,
+          "density": {
+            "enable": true,
+            "value_area": 800
+          }
+        },
+        "color": {
+          "value": "#ffffff"
+        },
+        "shape": {
+          "type": "circle",
+          "stroke": {
+            "width": 0,
+            "color": "#000000"
+          },
+          "polygon": {
+            "nb_sides": 5
+          }
+        },
+        "opacity": {
+          "value": 0.5,
+          "random": false
+        },
+        "size": {
+          "value": 3,
+          "random": true
+        },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#ffffff",
+          "opacity": 0.4,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 2,
+          "direction": "none",
+          "random": false,
+          "straight": false,
+          "bounce": false
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": {
+            "enable": true,
+            "mode": "grab"
+          },
+          "onclick": {
+            "enable": true,
+            "mode": "push"
+          },
+          "resize": true
+        },
+        "modes": {
+          "grab": {
+            "distance": 140,
+            "line_linked": {
+              "opacity": 1
+            }
+          },
+          "push": {
+            "particles_nb": 4
+          }
+        }
+      },
+      "retina_detect": true
+    });
+
+    // Efeito de Perspectiva para os Cards de Serviço
+    document.querySelectorAll('.service-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        let rect = card.getBoundingClientRect();
+        let x = e.clientX - rect.left;
+        let y = e.clientY - rect.top;
+        card.style.transform = `perspective(1000px) rotateX(${(y - rect.height / 2) / 10}deg) rotateY(${-(x - rect.width / 2) / 10}deg)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+      });
+    });
+
+    // Menu Mobile: Exibir e ocultar o popup
+    const hamburger = document.querySelector('.hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuClose = document.querySelector('.mobile-menu-close');
+
+    hamburger.addEventListener('click', () => {
+      mobileMenu.style.display = 'flex';
+    });
+
+    mobileMenuClose.addEventListener('click', () => {
+      mobileMenu.style.display = 'none';
+    });
+
+    // Opcional: fechar o menu ao clicar em algum link
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.style.display = 'none';
+      });
+    });
+  </script>
 </body>
 </html>
