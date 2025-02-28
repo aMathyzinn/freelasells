@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Freela Sells - Freelance Informal no Discord</title>
+  <!-- Font Awesome CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <!-- Splide CSS para carousel de depoimentos -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css">
+  <!-- AOS CSS para animações -->
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     :root {
       --primary: #00d1b2;
@@ -23,19 +23,45 @@
       --bg-gradient: linear-gradient(135deg, #141414, #1f1f1f);
       --card-bg: rgba(255, 255, 255, 0.05);
     }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
     body {
       font-family: 'Montserrat', sans-serif;
       background: var(--bg-gradient);
       color: var(--text);
+      margin: 0;
+      padding: 0;
       overflow-x: hidden;
       line-height: 1.6;
+      box-sizing: border-box;
     }
-    /* Loading Screen */
+    /* Indicador de Progresso no Scroll */
+    #scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 5px;
+      background: var(--primary);
+      width: 0%;
+      z-index: 3000;
+    }
+    /* Botão Voltar ao Topo */
+    #back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--primary);
+      color: var(--light);
+      padding: 10px 15px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      z-index: 3000;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+    }
+    #back-to-top:hover {
+      transform: scale(1.1);
+    }
+    /* Loading */
     #loading {
       position: fixed;
       top: 0;
@@ -46,32 +72,65 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 3000;
+      z-index: 4000;
     }
-    #loading .spinner {
-      border: 8px solid var(--secondary);
-      border-top: 8px solid var(--primary);
+    .loader-container {
+      position: relative;
+      width: 100px;
+      height: 100px;
+    }
+    .loader-ring {
+      position: relative;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      animation: spin 1s linear infinite;
+      background: conic-gradient(var(--primary), var(--secondary), var(--primary));
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), black calc(100% - 4px));
+      mask: radial-gradient(farthest-side, transparent calc(100% - 5px), black calc(100% - 4px));
+      animation: spinRing 1.5s linear infinite;
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    @keyframes spinRing {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
-    /* Navegação */
+    .orbit-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100px;
+      height: 100px;
+      transform: translate(-50%, -50%);
+      animation: orbit 1.5s linear infinite;
+    }
+    .loader-dot {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      background: var(--primary);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 15px var(--primary);
+    }
+    @keyframes orbit {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    /* Navegação com ajustes responsivos */
     .nav {
       position: fixed;
       top: 0;
       width: 100%;
       padding: 1.5rem 2rem;
       display: flex;
-      justify-content: space-between;
+      flex-wrap: wrap;
       align-items: center;
-      background: rgba(26, 26, 26, 0.95);
+      justify-content: space-between;
+      background: rgba(26,26,26,0.95);
       backdrop-filter: blur(10px);
-      z-index: 2000;
+      z-index: 2500;
+      box-sizing: border-box;
     }
     .nav-logo {
       font-size: clamp(1.5rem, 3vw, 1.75rem);
@@ -79,10 +138,76 @@
       background: linear-gradient(90deg, var(--primary), var(--secondary));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      max-width: 40%;
+      flex-shrink: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .theme-toggle-container {
+      margin-left: 1rem;
+    }
+    .theme-toggle-label {
+      display: inline-block;
+      position: relative;
+      width: 60px;
+      height: 34px;
+      cursor: pointer;
+    }
+    .theme-toggle-label input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .theme-toggle-slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+    .theme-toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    .theme-toggle-label .moon-icon {
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #f1c40f;
+    }
+    .theme-toggle-label .sun-icon {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #f39c12;
+    }
+    input:checked + .theme-toggle-slider {
+      background-color: var(--primary);
+    }
+    input:checked + .theme-toggle-slider:before {
+      transform: translateX(26px);
     }
     .nav-links {
+      flex: 1;
       display: flex;
       gap: 2rem;
+      justify-content: center;
+      min-width: 0;
     }
     .nav-link {
       color: var(--text);
@@ -90,6 +215,7 @@
       font-weight: 500;
       transition: color 0.3s;
       position: relative;
+      white-space: nowrap;
     }
     .nav-link::after {
       content: '';
@@ -107,26 +233,27 @@
     .nav-link:hover::after {
       width: 100%;
     }
-    /* Ícone Hamburger (inicialmente oculto) */
+    /* O ícone hamburger aparecerá somente em viewports menores que 600px */
     .hamburger {
       display: none;
+      flex-shrink: 0;
       cursor: pointer;
       font-size: 1.5rem;
       color: var(--text);
+      order: 99;
     }
-    /* Popup do Menu Mobile */
     .mobile-menu {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0,0,0,0.9);
       display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 2500;
+      z-index: 2600;
     }
     .mobile-menu a {
       color: var(--light);
@@ -146,16 +273,12 @@
       color: var(--light);
       cursor: pointer;
     }
-    /* Ocultar menu tradicional para mobile */
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-      }
-      .hamburger {
-        display: block;
-      }
+    /* Breakpoint ajustado: o hamburger só aparece em telas menores que 600px */
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hamburger { display: block; }
     }
-    /* Hero */
+    /* Seção Hero com efeito Typed.js */
     .hero {
       height: 100vh;
       position: relative;
@@ -183,7 +306,7 @@
       background: linear-gradient(90deg, var(--primary), var(--secondary));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 10px rgba(0, 209, 178, 0.7);
+      text-shadow: 0 0 10px rgba(0,209,178,0.7);
     }
     .hero-content p {
       font-size: clamp(1rem, 4vw, 1.25rem);
@@ -208,11 +331,13 @@
       .hero-content h1 { font-size: clamp(2rem, 8vw, 3rem); }
       .hero-content p { font-size: clamp(0.9rem, 3vw, 1rem); }
     }
-    /* Seções */
+    /* Seções Gerais */
     section {
       padding: 6rem 2rem;
       position: relative;
       z-index: 2;
+      max-width: 1200px;
+      margin: auto;
     }
     .section-title {
       text-align: center;
@@ -228,13 +353,20 @@
       font-size: clamp(1rem, 3vw, 1.25rem);
       color: var(--text);
     }
-    /* Cards de Serviço */
+    /* Serviços */
     .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: clamp(1rem, 2vw, 2rem);
       padding: 0 1rem;
-      justify-content: center; /* Centraliza os itens na última linha */
+    }
+    .services-grid .top-services {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: clamp(1rem, 2vw, 2rem);
+    }
+    .services-grid .bottom-services {
+      display: flex;
+      justify-content: center;
+      gap: clamp(1rem, 2vw, 2rem);
+      margin-top: clamp(1rem, 2vw, 2rem);
     }
     .service-card {
       background: var(--card-bg);
@@ -245,12 +377,12 @@
       cursor: pointer;
       position: relative;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255,255,255,0.1);
     }
     .service-card:hover {
       transform: translateY(-10px);
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+      background: rgba(255,255,255,0.1);
+      box-shadow: 0 20px 30px rgba(0,0,0,0.3);
     }
     .service-card::before {
       content: "";
@@ -264,23 +396,57 @@
       opacity: 0;
       transition: opacity 0.3s;
     }
-    .service-card:hover::before {
-      opacity: 1;
-    }
+    .service-card:hover::before { opacity: 1; }
     .service-card i {
       font-size: clamp(2rem, 6vw, 3rem);
       margin-bottom: 1rem;
       color: var(--primary);
     }
-    .service-card h3 {
-      margin-bottom: 0.75rem;
+    .service-card h3 { margin-bottom: 0.75rem; font-size: 1.5rem; }
+    .service-card p { font-size: 0.95rem; line-height: 1.4; }
+    /* Modal de Detalhes dos Serviços */
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3500;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s;
+    }
+    .modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-content {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 15px;
+      max-width: 600px;
+      width: 90%;
+      position: relative;
+      text-align: left;
+    }
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
       font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text);
     }
-    .service-card p {
-      font-size: 0.95rem;
-      line-height: 1.4;
+    /* Como Funciona */
+    #como-funciona {
+      background: rgba(0,0,0,0.15);
+      border-radius: 15px;
+      padding: 4rem 2rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
-    /* Cards de Informações */
     .info-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -296,34 +462,54 @@
     }
     .info-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.25);
     }
     .info-card h3 {
       margin-bottom: 1rem;
       font-size: 1.5rem;
       color: var(--primary);
     }
-    .info-card p {
-      font-size: 1rem;
+    .info-card p { font-size: 1rem; line-height: 1.6; }
+    /* Sobre */
+    #sobre .about-content {
+      max-width: 900px;
+      margin: auto;
+      background: rgba(0,0,0,0.15);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    #sobre .about-content p {
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
       line-height: 1.6;
     }
-    /* Seção About e Testemunhos */
-    .about-content,
-    .testimonials-grid {
-      max-width: 1000px;
-      margin: 0 auto;
+    /* Testemunhos Refinados */
+    #testemunhos {
+      background: rgba(0,0,0,0.1);
+      border-radius: 15px;
+      padding: 4rem 1rem;
     }
-    .about-content p {
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
+    #testemunhos .splide {
+      max-width: 800px;
+      margin: auto;
+    }
+    .splide__slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
     }
     .testimonial {
       background: var(--card-bg);
-      padding: 1.5rem;
+      padding: 2rem;
       border-radius: 15px;
       text-align: center;
       backdrop-filter: blur(10px);
       transition: transform 0.3s, box-shadow 0.3s;
+      max-width: 600px;
+      width: 100%;
+      margin: auto;
     }
     .testimonial:hover {
       transform: scale(1.03);
@@ -331,7 +517,9 @@
     }
     .testimonial p {
       font-style: italic;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      line-height: 1.6;
     }
     .testimonial h4 {
       font-weight: 600;
@@ -344,7 +532,7 @@
     /* Contato */
     .contact-card {
       max-width: 600px;
-      margin: 0 auto;
+      margin: auto;
       background: var(--card-bg);
       padding: 2rem;
       border-radius: 15px;
@@ -354,7 +542,7 @@
     }
     .contact-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.25);
     }
     .contact-card a {
       color: var(--primary);
@@ -366,44 +554,74 @@
       color: var(--accent);
       border-color: var(--accent);
     }
-    /* Rodapé */
+    /* Footer */
     footer {
-      background: rgba(26, 26, 26, 0.95);
+      background: rgba(26,26,26,0.95);
       padding: 2rem;
       text-align: center;
       color: var(--text);
     }
-    footer p {
-      font-size: 0.9rem;
-    }
-    /* Efeito flutuante */
-    .floating {
-      animation: float 4s ease-in-out infinite;
-    }
+    footer p { font-size: 0.9rem; }
+    /* Animação Flutuante */
+    .floating { animation: float 4s ease-in-out infinite; }
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-20px); }
     }
-    /* Responsividade Extra: para telas muito pequenas e telas grandes */
     @media (max-width: 480px) {
       .nav { padding: 1rem; }
       section { padding: 4rem 1rem; }
+      .theme-toggle-label {
+        width: 50px;
+        height: 28px;
+      }
+      .theme-toggle-label .theme-toggle-slider:before {
+        height: 22px;
+        width: 22px;
+        left: 3px;
+        bottom: 3px;
+      }
     }
     @media (min-width: 1200px) {
-      .services-grid { gap: 2rem; }
+      .services-grid .top-services { gap: 2rem; }
       .info-grid { gap: 2rem; }
     }
+    body.light-theme {
+      --dark: #ffffff;
+      --light: #333333;
+      --text: #333333;
+      --bg-gradient: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      --card-bg: rgba(0, 0, 0, 0.03);
+    }
+    body.light-theme .nav { background: #e0e0e0; }
+    body.light-theme .mobile-menu { background: #f8f9fa; }
   </style>
 </head>
 <body>
-  <!-- Loading Screen -->
+  <!-- Indicador de Progresso -->
+  <div id="scroll-progress"></div>
+  <!-- Botão Voltar ao Topo -->
+  <div id="back-to-top"><i class="fas fa-chevron-up"></i></div>
+  <!-- Loading -->
   <div id="loading">
-    <div class="spinner"></div>
+    <div class="loader-container">
+      <div class="loader-ring"></div>
+      <div class="orbit-container">
+        <div class="loader-dot"></div>
+      </div>
+    </div>
   </div>
-
   <!-- Navegação -->
   <nav class="nav">
     <div class="nav-logo">Freela Sells</div>
+    <div class="theme-toggle-container">
+      <label class="theme-toggle-label">
+        <input type="checkbox" id="theme-toggle-checkbox">
+        <span class="theme-toggle-slider"></span>
+        <i class="fas fa-moon moon-icon"></i>
+        <i class="fas fa-sun sun-icon"></i>
+      </label>
+    </div>
     <div class="nav-links">
       <a href="#servicos" class="nav-link">Serviços</a>
       <a href="#sobre" class="nav-link">Sobre</a>
@@ -411,13 +629,11 @@
       <a href="#testemunhos" class="nav-link">Testemunhos</a>
       <a href="#contato" class="nav-link">Contato</a>
     </div>
-    <!-- Ícone de menu para mobile -->
     <div class="hamburger">
       <i class="fas fa-bars"></i>
     </div>
   </nav>
-
-  <!-- Popup do Menu Mobile -->
+  <!-- Menu Mobile -->
   <div id="mobile-menu" class="mobile-menu">
     <div class="mobile-menu-close">
       <i class="fas fa-times"></i>
@@ -428,253 +644,251 @@
     <a href="#testemunhos" class="nav-link">Testemunhos</a>
     <a href="#contato" class="nav-link">Contato</a>
   </div>
-
-  <!-- Seção Hero -->
+  <!-- Seção Hero com efeito Typed.js -->
   <section class="hero">
     <div id="particles-js"></div>
     <div class="hero-content" data-aos="fade-up">
-      <h1>Freela Sells</h1>
+      <h1 id="typed-text"></h1>
       <p>Conectando talentos extraordinários a oportunidades incríveis no Discord.</p>
-      <button class="btn" onclick="document.querySelector('#contato').scrollIntoView({behavior:'smooth'})">
-        Junte-se a Nós
-      </button>
+      <button class="btn" onclick="document.querySelector('#contato').scrollIntoView({behavior:'smooth'})">Junte-se a Nós</button>
     </div>
   </section>
-
-  <!-- Seção de Serviços -->
+  <!-- Serviços -->
   <section id="servicos">
     <h2 class="section-title" data-aos="fade-up">Nossos Serviços</h2>
     <p class="section-subtitle" data-aos="fade-up" data-aos-delay="200">
       De otimização de computadores a design gráfico, oferecemos soluções completas para seus desafios.
     </p>
     <div class="services-grid">
-      <div class="service-card floating" data-aos="fade-up">
-        <i class="fas fa-desktop"></i>
-        <h3>Otimização de Computadores</h3>
-        <p>Melhore o desempenho do seu equipamento com técnicas avançadas e suporte especializado.</p>
+      <div class="top-services">
+        <div class="service-card floating" data-aos="fade-up" data-service="Otimização de Computadores" data-description="Melhore o desempenho do seu equipamento com técnicas avançadas e suporte especializado.">
+          <i class="fas fa-desktop"></i>
+          <h3>Otimização de Computadores</h3>
+          <p>Melhore o desempenho do seu equipamento com técnicas avançadas e suporte especializado.</p>
+        </div>
+        <div class="service-card floating" data-aos="fade-up" data-aos-delay="100" data-service="Ilustração Vetorial" data-description="Arte digital com alta qualidade e precisão, ideal para marcas e projetos criativos.">
+          <i class="fas fa-pen-nib"></i>
+          <h3>Ilustração Vetorial</h3>
+          <p>Arte digital com alta qualidade e precisão, ideal para marcas e projetos criativos.</p>
+        </div>
+        <div class="service-card floating" data-aos="fade-up" data-aos-delay="200" data-service="Design Gráfico" data-description="Criação de thumbnails, portraits e projetos gráficos que elevam sua identidade visual.">
+          <i class="fas fa-palette"></i>
+          <h3>Design Gráfico</h3>
+          <p>Criação de thumbnails, portraits e projetos gráficos que elevam sua identidade visual.</p>
+        </div>
+        <div class="service-card floating" data-aos="fade-up" data-aos-delay="300" data-service="WebDesign" data-description="Desenvolvimento de sites modernos, responsivos e com uma experiência única de usuário.">
+          <i class="fas fa-code"></i>
+          <h3>WebDesign</h3>
+          <p>Desenvolvimento de sites modernos, responsivos e com uma experiência única de usuário.</p>
+        </div>
+        <div class="service-card floating" data-aos="fade-up" data-aos-delay="400" data-service="Edição de Vídeo" data-description="Edições dinâmicas e criativas para transformar seus vídeos em verdadeiras obras de arte.">
+          <i class="fas fa-video"></i>
+          <h3>Edição de Vídeo</h3>
+          <p>Edições dinâmicas e criativas para transformar seus vídeos em verdadeiras obras de arte.</p>
+        </div>
       </div>
-      <div class="service-card floating" data-aos="fade-up" data-aos-delay="100">
-        <i class="fas fa-pen-nib"></i>
-        <h3>Ilustração Vetorial</h3>
-        <p>Arte digital com alta qualidade e precisão, ideal para marcas e projetos criativos.</p>
-      </div>
-      <div class="service-card floating" data-aos="fade-up" data-aos-delay="200">
-        <i class="fas fa-palette"></i>
-        <h3>Design Gráfico</h3>
-        <p>Criação de thumbnails, portraits e projetos gráficos que elevam sua identidade visual.</p>
-      </div>
-      <div class="service-card floating" data-aos="fade-up" data-aos-delay="300">
-        <i class="fas fa-code"></i>
-        <h3>WebDesign</h3>
-        <p>Desenvolvimento de sites modernos, responsivos e com uma experiência única de usuário.</p>
-      </div>
-      <div class="service-card floating" data-aos="fade-up" data-aos-delay="400">
-        <i class="fas fa-video"></i>
-        <h3>Edição de Vídeo</h3>
-        <p>Edições dinâmicas e criativas para transformar seus vídeos em verdadeiras obras de arte.</p>
-      </div>
-      <div class="service-card floating" data-aos="fade-up" data-aos-delay="500">
-        <i class="fas fa-laptop-code"></i>
-        <h3>Programação</h3>
-        <p>Desenvolvimento de soluções personalizadas para otimizar seus processos e negócios.</p>
-      </div>
-      <div class="service-card floating" data-aos="fade-up" data-aos-delay="600">
-        <i class="fas fa-layer-group"></i>
-        <h3>Interfaces Modernas</h3>
-        <p>Criamos interfaces intuitivas e elegantes que proporcionam uma experiência de uso impecável.</p>
-      </div>
-      <!-- Último Card: Caso a última linha tenha menos itens, ficará centralizado -->
-      <div class="service-card floating" data-aos="fade-up" data-aos-delay="700">
-        <i class="fas fa-comments"></i>
-        <h3>Consultoria e Suporte</h3>
-        <p>Conte com nossa consultoria personalizada para impulsionar seus projetos e solucionar desafios.</p>
+      <div class="bottom-services">
+        <div class="service-card floating" data-aos="fade-up" data-aos-delay="500" data-service="Interfaces Modernas" data-description="Criamos interfaces intuitivas e elegantes que proporcionam uma experiência de uso impecável.">
+          <i class="fas fa-layer-group"></i>
+          <h3>Interfaces Modernas</h3>
+          <p>Criamos interfaces intuitivas e elegantes que proporcionam uma experiência de uso impecável.</p>
+        </div>
+        <div class="service-card floating" data-aos="fade-up" data-aos-delay="600" data-service="Consultoria e Suporte" data-description="Conte com nossa consultoria personalizada para impulsionar seus projetos e solucionar desafios.">
+          <i class="fas fa-comments"></i>
+          <h3>Consultoria e Suporte</h3>
+          <p>Conte com nossa consultoria personalizada para impulsionar seus projetos e solucionar desafios.</p>
+        </div>
       </div>
     </div>
   </section>
-
-  <!-- Seção Sobre -->
+  <!-- Modal de Detalhes dos Serviços -->
+  <div id="service-modal" class="modal">
+    <div class="modal-content" data-aos="zoom-in">
+      <span class="modal-close"><i class="fas fa-times"></i></span>
+      <h2 id="modal-service-title"></h2>
+      <p id="modal-service-description"></p>
+    </div>
+  </div>
+  <!-- Sobre -->
   <section id="sobre">
     <h2 class="section-title" data-aos="fade-up">Sobre a Freela Sell's</h2>
     <div class="about-content" data-aos="fade-up" data-aos-delay="200">
-      <p>
-        A Freela Sell's é mais do que uma simples plataforma – é um ponto de encontro para designers, freelancers, clientes e profissionais de diversas áreas se conectarem e realizarem projetos inovadores.
-      </p>
-      <p>
-        Somos uma comunidade vibrante e dedicada, empenhada em oferecer serviços de alta qualidade e atendimento personalizado. Nossa missão é liderar o mercado de freelance "informal" no Discord, conectando talentos de todo o mundo e proporcionando experiências transformadoras.
-      </p>
+      <p>A Freela Sell's é mais do que uma simples plataforma – é um ponto de encontro para designers, freelancers, clientes e profissionais de diversas áreas se conectarem e realizarem projetos inovadores.</p>
+      <p>Somos uma comunidade vibrante e dedicada, empenhada em oferecer serviços de alta qualidade e atendimento personalizado. Nossa missão é liderar o mercado de freelance "informal" no Discord, conectando talentos de todo o mundo e proporcionando experiências transformadoras.</p>
     </div>
   </section>
-
-  <!-- Seção Como Funciona -->
+  <!-- Como Funciona -->
   <section id="como-funciona">
     <h2 class="section-title" data-aos="fade-up">Como Funciona</h2>
     <div class="info-grid">
       <div class="info-card" data-aos="fade-up">
         <h3>Equipe Dedicada</h3>
-        <p>
-          Nossa equipe especializada atua como elo entre você e os melhores profissionais. Conosco, seu projeto é tratado com atenção e expertise.
-        </p>
+        <p>Nossa equipe especializada atua como elo entre você e os melhores profissionais. Conosco, seu projeto é tratado com atenção e expertise.</p>
       </div>
       <div class="info-card" data-aos="fade-up" data-aos-delay="150">
         <h3>Interação Simplificada</h3>
-        <p>
-          Converse diretamente com nossos profissionais através dos chats dedicados no Discord. Sem burocracia, sem complicações.
-        </p>
+        <p>Converse diretamente com nossos profissionais através dos chats dedicados no Discord. Sem burocracia, sem complicações.</p>
       </div>
       <div class="info-card" data-aos="fade-up" data-aos-delay="300">
         <h3>Segurança e Sigilo</h3>
-        <p>
-          Com o respaldo do Grupo aMathyzin, garantimos que todas as transações sejam protegidas, mantendo seus dados em total sigilo.
-        </p>
+        <p>Com o respaldo do Grupo aMathyzin, garantimos que todas as transações sejam protegidas, mantendo seus dados em total sigilo.</p>
       </div>
     </div>
   </section>
-
-  <!-- Seção Testemunhos -->
+  <!-- Testemunhos com Slider Refinado -->
   <section id="testemunhos">
     <h2 class="section-title" data-aos="fade-up">O Que Dizem Nossos Clientes</h2>
-    <p class="section-subtitle" data-aos="fade-up" data-aos-delay="200">
-      Depoimentos reais de clientes que transformaram suas ideias em realidade com a gente.
-    </p>
-    <div class="testimonials-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
-      <div class="testimonial" data-aos="fade-up">
-        <p>
-          "A Freela Sell's me conectou com profissionais incríveis que levaram meu projeto para o próximo nível. Atendimento rápido e de altíssima qualidade!"
-        </p>
-        <h4>Mariana Silva</h4>
-        <span>Empreendedora Digital</span>
-      </div>
-      <div class="testimonial" data-aos="fade-up" data-aos-delay="150">
-        <p>
-          "Nunca imaginei encontrar uma comunidade tão dinâmica e profissional no Discord. Recomendo a todos que buscam inovação e criatividade."
-        </p>
-        <h4>Rafael Costa</h4>
-        <span>Designer Gráfico</span>
-      </div>
-      <div class="testimonial" data-aos="fade-up" data-aos-delay="300">
-        <p>
-          "A abordagem direta e sem burocracia fez toda a diferença. Meu serviço foi entregue com excelência e segurança. Estou muito satisfeito!"
-        </p>
-        <h4>Luana Pereira</h4>
-        <span>Empresária</span>
+    <p class="section-subtitle" data-aos="fade-up" data-aos-delay="200">Depoimentos reais de clientes que transformaram suas ideias em realidade com a gente.</p>
+    <div class="splide" id="testimonial-slider" data-aos="fade-up">
+      <div class="splide__track">
+        <ul class="splide__list">
+          <li class="splide__slide">
+            <div class="testimonial">
+              <p>"A Freela Sell's me conectou com profissionais incríveis que levaram meu projeto para o próximo nível. Atendimento rápido e de altíssima qualidade!"</p>
+              <h4>Mariana Silva</h4>
+              <span>Empreendedora Digital</span>
+            </div>
+          </li>
+          <li class="splide__slide">
+            <div class="testimonial">
+              <p>"Nunca imaginei encontrar uma comunidade tão dinâmica e profissional no Discord. Recomendo a todos que buscam inovação e criatividade."</p>
+              <h4>Rafael Costa</h4>
+              <span>Designer Gráfico</span>
+            </div>
+          </li>
+          <li class="splide__slide">
+            <div class="testimonial">
+              <p>"A abordagem direta e sem burocracia fez toda a diferença. Meu serviço foi entregue com excelência e segurança. Estou muito satisfeito!"</p>
+              <h4>Luana Pereira</h4>
+              <span>Empresária</span>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </section>
-
-  <!-- Seção Contato -->
+  <!-- Contato -->
   <section id="contato">
     <h2 class="section-title" data-aos="fade-up">Entre em Contato</h2>
     <div class="contact-card" data-aos="fade-up" data-aos-delay="200">
-      <p>
-        Quer saber mais, negociar um serviço ou simplesmente bater um papo? Fale conosco através do nosso Discord ou envie um e-mail.
-      </p>
-      <p>
-        <i class="fab fa-discord"></i> <a href="https://discord.gg/seulink" target="_blank">Acesse nosso Discord</a>
-      </p>
-      <p>
-        <i class="fas fa-envelope"></i> <a href="mailto:contato@freelasells.com">contato@freelasells.com</a>
-      </p>
+      <p>Quer saber mais, negociar um serviço ou simplesmente bater um papo? Fale conosco através do nosso Discord ou envie um e-mail.</p>
+      <p><i class="fab fa-discord"></i> <a href="https://discord.gg/seulink" target="_blank">Acesse nosso Discord</a></p>
+      <p><i class="fas fa-envelope"></i> <a href="mailto:contato@freelasells.com">contato@freelasells.com</a></p>
     </div>
   </section>
-
-  <!-- Rodapé -->
+  <!-- Footer -->
   <footer>
     <p>&copy; 2025 Freela Sells. Todos os direitos reservados.</p>
     <p>Desenvolvido com paixão e dedicação pelo Grupo aMathyzin.</p>
   </footer>
-
   <!-- Scripts -->
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- GSAP e ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <!-- AOS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <!-- particlesJS -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <!-- Vanta.FOG -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.21/vanta.fog.min.js"></script>
+  <!-- Typed.js -->
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <!-- Splide.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script>
   <script>
+    // Variável global para efeito Vanta
+    let vantaEffect = null;
+    // Função para inicializar o fundo de acordo com o tema
+    function initBackground() {
+      if(vantaEffect) {
+        vantaEffect.destroy();
+        vantaEffect = null;
+      }
+      if(window.pJSDom && window.pJSDom.length > 0) {
+        window.pJSDom[0].pJS.fn.vendors.destroy();
+        document.getElementById('particles-js').innerHTML = "";
+      }
+      if(document.body.classList.contains('light-theme')){
+        // Tema claro: Vanta.FOG com cores azuladas
+        vantaEffect = VANTA.FOG({
+          el: "#particles-js",
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          highlightColor: 0xadd8e6,
+          midtoneColor: 0x87cefa,
+          lowlightColor: 0x4682b4,
+          baseColor: 0x1e90ff,
+          speed: 1.0,
+          zoom: 1.0
+        });
+      } else {
+        // Tema escuro: particlesJS
+        particlesJS("particles-js", {
+          "particles": {
+            "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+            "color": { "value": "#ffffff" },
+            "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 } },
+            "opacity": { "value": 0.5, "random": false },
+            "size": { "value": 3, "random": true },
+            "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.4, "width": 1 },
+            "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "bounce": false }
+          },
+          "interactivity": {
+            "detect_on": "canvas",
+            "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+            "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 1 } }, "push": { "particles_nb": 4 } }
+          },
+          "retina_detect": true
+        });
+      }
+    }
+    // Após o carregamento da página
     window.addEventListener('load', () => {
       gsap.to('#loading', {
         opacity: 0,
+        delay: 3,
         duration: 0.5,
-        onComplete: () => {
-          document.getElementById('loading').style.display = 'none';
-        }
+        onComplete: () => { document.getElementById('loading').style.display = 'none'; }
       });
-      AOS.init({
-        duration: 1000,
-        once: true
+      AOS.init({ duration: 1000, once: true });
+      initBackground();
+      // Efeito de digitação no hero
+      new Typed('#typed-text', {
+        strings: ["Freela Sells", "Conectando Talentos", "Transformando Projetos"],
+        typeSpeed: 100,
+        backSpeed: 50,
+        loop: true
       });
+      // Inicializa o slider de depoimentos com Splide
+      new Splide('#testimonial-slider', {
+        type   : 'loop',
+        perPage: 1,
+        autoplay: true,
+        interval: 5000,
+        pauseOnHover: true
+      }).mount();
     });
-
-    particlesJS("particles-js", {
-      "particles": {
-        "number": {
-          "value": 80,
-          "density": {
-            "enable": true,
-            "value_area": 800
-          }
-        },
-        "color": {
-          "value": "#ffffff"
-        },
-        "shape": {
-          "type": "circle",
-          "stroke": {
-            "width": 0,
-            "color": "#000000"
-          },
-          "polygon": {
-            "nb_sides": 5
-          }
-        },
-        "opacity": {
-          "value": 0.5,
-          "random": false
-        },
-        "size": {
-          "value": 3,
-          "random": true
-        },
-        "line_linked": {
-          "enable": true,
-          "distance": 150,
-          "color": "#ffffff",
-          "opacity": 0.4,
-          "width": 1
-        },
-        "move": {
-          "enable": true,
-          "speed": 2,
-          "direction": "none",
-          "random": false,
-          "straight": false,
-          "bounce": false
-        }
-      },
-      "interactivity": {
-        "detect_on": "canvas",
-        "events": {
-          "onhover": {
-            "enable": true,
-            "mode": "grab"
-          },
-          "onclick": {
-            "enable": true,
-            "mode": "push"
-          },
-          "resize": true
-        },
-        "modes": {
-          "grab": {
-            "distance": 140,
-            "line_linked": {
-              "opacity": 1
-            }
-          },
-          "push": {
-            "particles_nb": 4
-          }
-        }
-      },
-      "retina_detect": true
+    // Alternar tema
+    document.getElementById('theme-toggle-checkbox').addEventListener('change', function() {
+      if(this.checked){
+        document.body.classList.add('light-theme');
+      } else {
+        document.body.classList.remove('light-theme');
+      }
+      initBackground();
     });
-
-    // Efeito de Perspectiva para os Cards de Serviço
+    // Interação nos cards de serviço: exibe modal com mais detalhes
     document.querySelectorAll('.service-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const title = card.getAttribute('data-service');
+        const description = card.getAttribute('data-description');
+        document.getElementById('modal-service-title').innerText = title;
+        document.getElementById('modal-service-description').innerText = description;
+        document.getElementById('service-modal').classList.add('active');
+      });
       card.addEventListener('mousemove', e => {
         let rect = card.getBoundingClientRect();
         let x = e.clientX - rect.left;
@@ -685,25 +899,32 @@
         card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
       });
     });
-
-    // Menu Mobile: Exibir e ocultar o popup
+    // Fechar modal
+    document.querySelector('.modal-close').addEventListener('click', () => {
+      document.getElementById('service-modal').classList.remove('active');
+    });
+    // Menu mobile
     const hamburger = document.querySelector('.hamburger');
     const mobileMenu = document.getElementById('mobile-menu');
     const mobileMenuClose = document.querySelector('.mobile-menu-close');
-
-    hamburger.addEventListener('click', () => {
-      mobileMenu.style.display = 'flex';
-    });
-
-    mobileMenuClose.addEventListener('click', () => {
-      mobileMenu.style.display = 'none';
-    });
-
-    // Opcional: fechar o menu ao clicar em algum link
+    hamburger.addEventListener('click', () => { mobileMenu.style.display = 'flex'; });
+    mobileMenuClose.addEventListener('click', () => { mobileMenu.style.display = 'none'; });
     document.querySelectorAll('.mobile-menu a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.style.display = 'none';
-      });
+      link.addEventListener('click', () => { mobileMenu.style.display = 'none'; });
+    });
+    // Botão voltar ao topo e atualização do indicador de scroll
+    const backToTop = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+      if(window.scrollY > 300){
+        backToTop.style.display = 'block';
+      } else {
+        backToTop.style.display = 'none';
+      }
+      const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      document.getElementById('scroll-progress').style.width = scrollPercent + '%';
+    });
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({top: 0, behavior: 'smooth'});
     });
   </script>
 </body>
