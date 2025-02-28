@@ -1,1087 +1,387 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <!-- Meta Tags e Título -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Freela Sells - Freelance Informal no Discord</title>
-
-  <!-- Frameworks e Bibliotecas Externas -->
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-  <!-- Splide CSS (Carousel de Depoimentos) -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css">
-  <!-- AOS (Animate On Scroll) -->
-  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Animate.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  <!-- Custom Styles -->
-  <style>
-    /* Variáveis CSS */
-    :root {
-      --primary: #00d1b2;
-      --secondary: #209cee;
-      --accent: #ff3860;
-      --dark: #1a1a1a;
-      --light: #f5f5f5;
-      --text: #e0e0e0;
-      --bg-gradient: linear-gradient(135deg, #141414, #1f1f1f);
-      --card-bg: rgba(255, 255, 255, 0.05);
-    }
-    /* Custom Scrollbar - WebKit */
-    ::-webkit-scrollbar {
-      width: 12px;
-      height: 12px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(0,209,178,0.5);
-      border-radius: 6px;
-      border: 2px solid transparent;
-      background-clip: content-box;
-      box-shadow: 0 0 5px rgba(0,209,178,0.5);
-      transition: background-color 0.3s, box-shadow 0.3s, opacity 0.3s;
-      opacity: 0.6;
-    }
-    body.scrolling ::-webkit-scrollbar-thumb {
-      opacity: 1;
-      box-shadow: 0 0 15px rgba(0,209,178,0.8);
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(0,209,178,0.7);
-      box-shadow: 0 0 15px rgba(0,209,178,0.8);
-    }
-    /* Custom Scrollbar - Firefox */
-    * {
-      scrollbar-width: thin;
-      scrollbar-color: rgba(0,209,178,0.6) transparent;
-    }
-    body.scrolling {
-      scrollbar-color: rgba(0,209,178,1) transparent;
-    }
-    /* Reset e Estilos Gerais */
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background: var(--bg-gradient);
-      color: var(--text);
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-      line-height: 1.6;
-      box-sizing: border-box;
-    }
-    /* Indicador de Progresso no Scroll */
-    #scroll-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 5px;
-      background: var(--primary);
-      width: 0%;
-      z-index: 3000;
-    }
-    /* Botão Voltar ao Topo */
-    #back-to-top {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: var(--primary);
-      color: var(--light);
-      padding: 10px 15px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: none;
-      z-index: 3000;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-      transition: transform 0.3s;
-    }
-    #back-to-top:hover {
-      transform: scale(1.1);
-    }
-    /* Loading Screen */
-    #loading {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: var(--dark);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 4000;
-    }
-    .loader-container {
-      position: relative;
-      width: 100px;
-      height: 100px;
-    }
-    .loader-ring {
-      position: relative;
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      background: conic-gradient(var(--primary), var(--secondary), var(--primary));
-      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), black calc(100% - 4px));
-      mask: radial-gradient(farthest-side, transparent calc(100% - 5px), black calc(100% - 4px));
-      animation: spinRing 1.5s linear infinite;
-    }
-    @keyframes spinRing {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    .orbit-container {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 100px;
-      height: 100px;
-      transform: translate(-50%, -50%);
-      animation: orbit 1.5s linear infinite;
-    }
-    .loader-dot {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      width: 20px;
-      height: 20px;
-      background: var(--primary);
-      border-radius: 50%;
-      transform: translateX(-50%);
-      box-shadow: 0 0 15px var(--primary);
-    }
-    @keyframes orbit {
-      from { transform: translate(-50%, -50%) rotate(0deg); }
-      to { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-    /* Navegação */
-    .nav {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      padding: 1.5rem 2rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(26,26,26,0.95);
-      backdrop-filter: blur(10px);
-      z-index: 2500;
-      box-sizing: border-box;
-    }
-    .nav-logo {
-      font-size: clamp(1.5rem, 3vw, 1.75rem);
-      font-weight: 700;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      max-width: 40%;
-      flex-shrink: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .theme-toggle-container {
-      margin-left: 1rem;
-    }
-    .theme-toggle-label {
-      display: inline-block;
-      position: relative;
-      width: 60px;
-      height: 34px;
-      cursor: pointer;
-    }
-    .theme-toggle-label input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .theme-toggle-slider {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      transition: 0.4s;
-      border-radius: 34px;
-    }
-    .theme-toggle-slider:before {
-      position: absolute;
-      content: "";
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: 0.4s;
-      border-radius: 50%;
-    }
-    .theme-toggle-label .moon-icon {
-      position: absolute;
-      left: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 18px;
-      color: #f1c40f;
-    }
-    .theme-toggle-label .sun-icon {
-      position: absolute;
-      right: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 18px;
-      color: #f39c12;
-    }
-    input:checked + .theme-toggle-slider {
-      background-color: var(--primary);
-    }
-    input:checked + .theme-toggle-slider:before {
-      transform: translateX(26px);
-    }
-    .nav-links {
-      flex: 1;
-      display: flex;
-      gap: 2rem;
-      justify-content: center;
-      min-width: 0;
-    }
-    .nav-link {
-      color: var(--text);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s;
-      position: relative;
-      white-space: nowrap;
-    }
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      width: 0%;
-      height: 2px;
-      background: var(--primary);
-      left: 0;
-      bottom: -4px;
-      transition: width 0.3s;
-    }
-    .nav-link:hover {
-      color: var(--primary);
-    }
-    .nav-link:hover::after {
-      width: 100%;
-    }
-    /* Menu Mobile */
-    @media (max-width: 600px) {
-      .nav-links { display: none; }
-      .hamburger { display: block; }
-    }
-    .hamburger {
-      display: none;
-      flex-shrink: 0;
-      cursor: pointer;
-      font-size: 1.5rem;
-      color: var(--text);
-      order: 99;
-    }
-    .mobile-menu {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.9);
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 2600;
-    }
-    .mobile-menu a {
-      color: var(--light);
-      font-size: 1.5rem;
-      text-decoration: none;
-      margin: 1rem;
-      transition: color 0.3s;
-    }
-    .mobile-menu a:hover {
-      color: var(--primary);
-    }
-    .mobile-menu-close {
-      position: absolute;
-      top: 1.5rem;
-      right: 1.5rem;
-      font-size: 2rem;
-      color: var(--light);
-      cursor: pointer;
-    }
-    /* Seção Hero */
-    .hero {
-      height: 100vh;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      overflow: hidden;
-    }
-    .hero #particles-js {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-    }
-    /* Garante que o canvas do Vanta ocupe todo o contêiner */
-    #particles-js canvas {
-      width: 100% !important;
-      height: 100% !important;
-      object-fit: cover;
-    }
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      padding: 2rem;
-      max-width: 800px;
-    }
-    .hero-content h1 {
-      font-size: clamp(2rem, 8vw, 4rem);
-      margin-bottom: 1rem;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 10px rgba(0,209,178,0.7);
-    }
-    .hero-content p {
-      font-size: clamp(1rem, 4vw, 1.25rem);
-      margin-bottom: 1.5rem;
-      text-shadow: 0 0 8px rgba(0,0,0,0.3);
-    }
-    .btn {
-      padding: 0.75rem 1.5rem;
-      border: none;
-      background: var(--primary);
-      color: var(--light);
-      border-radius: 50px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.3s, box-shadow 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-    .btn:hover {
-      background: var(--secondary);
-      box-shadow: 0 0 15px var(--secondary);
-    }
-    /* Ripple effect para botões */
-    .btn .ripple {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.4);
-      transform: scale(0);
-      animation: ripple-effect 0.6s linear;
-      pointer-events: none;
-    }
-    @keyframes ripple-effect {
-      to {
-        transform: scale(4);
-        opacity: 0;
-      }
-    }
-    @media (max-width: 768px) {
-      .hero-content h1 { font-size: clamp(2rem, 8vw, 3rem); }
-      .hero-content p { font-size: clamp(0.9rem, 3vw, 1rem); }
-    }
-    /* Seções Gerais */
-    section {
-      padding: 6rem 2rem;
-      position: relative;
-      z-index: 2;
-      max-width: 1200px;
-      margin: auto;
-    }
-    .section-title {
-      text-align: center;
-      margin-bottom: 3rem;
-      font-size: clamp(2rem, 5vw, 2.75rem);
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .section-subtitle {
-      text-align: center;
-      margin-bottom: 2rem;
-      font-size: clamp(1rem, 3vw, 1.25rem);
-      color: var(--text);
-    }
-    /* Serviços */
-    .services-grid {
-      padding: 0 1rem;
-    }
-    .services-grid .top-services {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: clamp(1rem, 2vw, 2rem);
-    }
-    .services-grid .bottom-services {
-      display: flex;
-      justify-content: center;
-      gap: clamp(1rem, 2vw, 2rem);
-      margin-top: clamp(1rem, 2vw, 2rem);
-    }
-    .service-card {
-      background: var(--card-bg);
-      padding: 2rem;
-      border-radius: 15px;
-      backdrop-filter: blur(10px);
-      transition: background 0.3s, box-shadow 0.3s;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .service-card:hover {
-      background: rgba(255,255,255,0.1);
-      box-shadow: 0 20px 30px rgba(0,0,0,0.3);
-    }
-    .service-card::before {
-      content: "";
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.15), transparent);
-      transform: rotate(45deg);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .service-card:hover::before { opacity: 1; }
-    .service-card i {
-      font-size: clamp(2rem, 6vw, 3rem);
-      margin-bottom: 1rem;
-      color: var(--primary);
-    }
-    .service-card h3 { margin-bottom: 0.75rem; font-size: 1.5rem; }
-    .service-card p { font-size: 0.95rem; line-height: 1.4; }
-    /* Modal de Detalhes dos Serviços */
-    .modal {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 3500;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s;
-    }
-    .modal.active {
-      opacity: 1;
-      visibility: visible;
-    }
-    .modal-content {
-      background: var(--card-bg);
-      padding: 2rem;
-      border-radius: 15px;
-      max-width: 600px;
-      width: 90%;
-      position: relative;
-      text-align: left;
-    }
-    .modal-close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--text);
-    }
-    /* Seção "Como Funciona" */
-    #como-funciona {
-      background: rgba(0,0,0,0.15);
-      border-radius: 15px;
-      padding: 4rem 2rem;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-    }
-    .info-card {
-      background: var(--card-bg);
-      padding: 2rem;
-      border-left: 4px solid var(--primary);
-      border-radius: 8px;
-      backdrop-filter: blur(10px);
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .info-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.25);
-    }
-    .info-card h3 {
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
-      color: var(--primary);
-    }
-    .info-card p { font-size: 1rem; line-height: 1.6; }
-    /* Seção "Sobre" */
-    #sobre .about-content {
-      max-width: 900px;
-      margin: auto;
-      background: rgba(0,0,0,0.15);
-      padding: 2rem;
-      border-radius: 15px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    #sobre .about-content p {
-      margin-bottom: 1.5rem;
-      font-size: 1.1rem;
-      line-height: 1.6;
-    }
-    /* Seção "Testemunhos" */
-    #testemunhos {
-      background: rgba(0,0,0,0.1);
-      border-radius: 15px;
-      padding: 4rem 1rem;
-    }
-    #testemunhos .splide {
-      max-width: 800px;
-      margin: auto;
-    }
-    .splide__slide {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-    }
-    .testimonial {
-      background: var(--card-bg);
-      padding: 2rem;
-      border-radius: 15px;
-      text-align: center;
-      backdrop-filter: blur(10px);
-      transition: transform 0.3s, box-shadow 0.3s;
-      max-width: 600px;
-      width: 100%;
-      margin: auto;
-    }
-    .testimonial:hover {
-      transform: scale(1.03);
-      box-shadow: 0 15px 25px rgba(0,0,0,0.3);
-    }
-    .testimonial p {
-      font-style: italic;
-      margin-bottom: 1.5rem;
-      font-size: 1.1rem;
-      line-height: 1.6;
-    }
-    .testimonial h4 {
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-    .testimonial span {
-      font-size: 0.9rem;
-      color: var(--secondary);
-    }
-    /* Seção "Contato" */
-    .contact-card {
-      max-width: 600px;
-      margin: auto;
-      background: var(--card-bg);
-      padding: 2rem;
-      border-radius: 15px;
-      backdrop-filter: blur(10px);
-      text-align: center;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .contact-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.25);
-    }
-    .contact-card a {
-      color: var(--primary);
-      text-decoration: none;
-      border-bottom: 1px solid var(--primary);
-      transition: color 0.3s, border-color 0.3s;
-    }
-    .contact-card a:hover {
-      color: var(--accent);
-      border-color: var(--accent);
-    }
-    /* Footer */
-    footer {
-      background: rgba(26,26,26,0.95);
-      padding: 2rem;
-      text-align: center;
-      color: var(--text);
-    }
-    footer p { font-size: 0.9rem; }
-    /* Animação Flutuante */
-    .floating { animation: float 4s ease-in-out infinite; }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
-    }
-    @media (max-width: 480px) {
-      .nav { padding: 1rem; }
-      section { padding: 4rem 1rem; }
-      .theme-toggle-label {
-        width: 50px;
-        height: 28px;
-      }
-      .theme-toggle-label .theme-toggle-slider:before {
-        height: 22px;
-        width: 22px;
-        left: 3px;
-        bottom: 3px;
-      }
-    }
-    @media (min-width: 1200px) {
-      .services-grid .top-services { gap: 2rem; }
-      .info-grid { gap: 2rem; }
-    }
-    /* Tema Light */
-    body.light-theme {
-      --dark: #ffffff;
-      --light: #333333;
-      --text: #333333;
-      --bg-gradient: linear-gradient(135deg, #f8f9fa, #e9ecef);
-      --card-bg: rgba(0, 0, 0, 0.03);
-    }
-    body.light-theme .nav { background: #e0e0e0; }
-    body.light-theme .mobile-menu { background: #f8f9fa; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freela Sells - Freelance Informal no Discord</title>
+<meta property="og:title" content="Freela Sells - Freelance Informal no Discord">
+<meta property="og:description" content="Conectando talentos extraordinários a oportunidades incríveis no Discord. Conheca ja nossos servicos e contrate-nos!">
+<meta property="og:image" content="./freela.png">
+<meta property="og:url" content="https://freelasells.vercel.app/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/css/splide.min.css">
+<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<style>
+:root{--primary:#00d1b2;--secondary:#209cee;--accent:#ff3860;--dark:#1a1a1a;--light:#f5f5f5;--text:#e0e0e0;--bg-gradient:linear-gradient(135deg,#141414,#1f1f1f);--card-bg:rgba(255,255,255,0.05)}
+::-webkit-scrollbar{width:12px;height:12px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,209,178,0.5);border-radius:6px;border:2px solid transparent;background-clip:content-box;box-shadow:0 0 5px rgba(0,209,178,0.5);transition:background-color 0.3s,box-shadow 0.3s,opacity 0.3s;opacity:0.6}body.scrolling ::-webkit-scrollbar-thumb{opacity:1;box-shadow:0 0 15px rgba(0,209,178,0.8)}::-webkit-scrollbar-thumb:hover{background:rgba(0,209,178,0.7);box-shadow:0 0 15px rgba(0,209,178,0.8)}
+*{scrollbar-width:thin;scrollbar-color:rgba(0,209,178,0.6) transparent}body.scrolling{scrollbar-color:rgba(0,209,178,1) transparent}
+body{font-family:'Montserrat',sans-serif;background:var(--bg-gradient);color:var(--text);margin:0;padding:0;overflow-x:hidden;line-height:1.6;box-sizing:border-box}
+#scroll-progress{position:fixed;top:0;left:0;height:5px;background:var(--primary);width:0%;z-index:3000}
+#back-to-top{position:fixed;bottom:30px;right:30px;background:var(--primary);color:var(--light);padding:10px 15px;border-radius:50%;cursor:pointer;display:none;z-index:3000;box-shadow:0 4px 6px rgba(0,0,0,0.3);transition:transform 0.3s}
+#back-to-top:hover{transform:scale(1.1)}
+#loading{position:fixed;top:0;left:0;width:100vw;height:100vh;background:var(--dark);display:flex;align-items:center;justify-content:center;z-index:4000}
+.loader-container{position:relative;width:100px;height:100px}
+.loader-ring{position:relative;width:100px;height:100px;border-radius:50%;background:conic-gradient(var(--primary),var(--secondary),var(--primary));-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),black calc(100% - 4px));mask:radial-gradient(farthest-side,transparent calc(100% - 5px),black calc(100% - 4px));animation:spinRing 1.5s linear infinite}
+@keyframes spinRing{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.orbit-container{position:absolute;top:50%;left:50%;width:100px;height:100px;transform:translate(-50%,-50%);animation:orbit 1.5s linear infinite}
+.loader-dot{position:absolute;top:0;left:50%;width:20px;height:20px;background:var(--primary);border-radius:50%;transform:translateX(-50%);box-shadow:0 0 15px var(--primary)}
+@keyframes orbit{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+.nav{position:fixed;top:0;width:100%;padding:1.5rem 2rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;background:rgba(26,26,26,0.95);backdrop-filter:blur(10px);z-index:2500;box-sizing:border-box}
+.nav-logo{font-size:clamp(1.5rem,3vw,1.75rem);font-weight:700;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;max-width:40%;flex-shrink:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-right{display:flex;align-items:center;gap:1rem}
+.theme-toggle-container{margin-left:1rem}
+.theme-toggle-label{display:inline-block;position:relative;width:60px;height:34px;cursor:pointer}
+.theme-toggle-label input{opacity:0;width:0;height:0}
+.theme-toggle-slider{position:absolute;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:0.4s;border-radius:34px}
+.theme-toggle-slider:before{position:absolute;content:"";height:26px;width:26px;left:4px;bottom:4px;background-color:white;transition:0.4s;border-radius:50%}
+.theme-toggle-label .moon-icon{position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:18px;color:#f1c40f}
+.theme-toggle-label .sun-icon{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:18px;color:#f39c12}
+input:checked + .theme-toggle-slider{background-color:var(--primary)}
+input:checked + .theme-toggle-slider:before{transform:translateX(26px)}
+.nav-links{flex:1;display:flex;gap:2rem;justify-content:center;min-width:0}
+.nav-link{color:var(--text);text-decoration:none;font-weight:500;transition:color 0.3s;position:relative;white-space:nowrap}
+.nav-link::after{content:"";position:absolute;width:0%;height:2px;background:var(--primary);left:0;bottom:-4px;transition:width 0.3s}
+.nav-link:hover{color:var(--primary)}
+.nav-link:hover::after{width:100%}
+@media (max-width:600px){.nav-links{display:none}}
+@media (max-width:600px){.hamburger{display:block}}
+.hamburger{display:none;flex-shrink:0;cursor:pointer;font-size:1.5rem;color:var(--text);order:99}
+.mobile-menu{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.9);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:2600}
+.mobile-menu a{color:var(--light);font-size:1.5rem;text-decoration:none;margin:1rem;transition:color 0.3s}
+.mobile-menu a:hover{color:var(--primary)}
+.mobile-menu-close{position:absolute;top:1.5rem;right:1.5rem;font-size:2rem;color:var(--light);cursor:pointer}
+.hero{height:100vh;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+.hero #particles-js{position:absolute;width:100%;height:100%;z-index:1}
+#particles-js canvas{width:100% !important;height:100% !important;object-fit:cover}
+.hero-content{position:relative;z-index:2;padding:2rem;max-width:800px}
+.hero-content h1{font-size:clamp(2rem,8vw,4rem);margin-bottom:1rem;background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 10px rgba(0,209,178,0.7)}
+.hero-content p{font-size:clamp(1rem,4vw,1.25rem);margin-bottom:1.5rem;text-shadow:0 0 8px rgba(0,0,0,0.3)}
+.btn{padding:0.75rem 1.5rem;border:none;background:var(--primary);color:var(--light);border-radius:50px;cursor:pointer;font-weight:600;transition:background 0.3s,box-shadow 0.3s;position:relative;overflow:hidden}
+.btn:hover{background:var(--secondary);box-shadow:0 0 15px var(--secondary)}
+.btn .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,0.4);transform:scale(0);animation:ripple-effect 0.6s linear;pointer-events:none}
+@keyframes ripple-effect{to{transform:scale(4);opacity:0}}
+@media (max-width:768px){.hero-content h1{font-size:clamp(2rem,8vw,3rem)}.hero-content p{font-size:clamp(0.9rem,3vw,1rem)}}
+section{padding:6rem 2rem;position:relative;z-index:2;max-width:1200px;margin:auto}
+.section-title{text-align:center;margin-bottom:3rem;font-size:clamp(2rem,5vw,2.75rem);background:linear-gradient(90deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.section-subtitle{text-align:center;margin-bottom:2rem;font-size:clamp(1rem,3vw,1.25rem);color:var(--text)}
+.services-grid{padding:0 1rem}
+.services-grid .top-services{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(1rem,2vw,2rem)}
+.services-grid .bottom-services{display:flex;justify-content:center;gap:clamp(1rem,2vw,2rem);margin-top:clamp(1rem,2vw,2rem)}
+.service-card{background:var(--card-bg);padding:2rem;border-radius:15px;backdrop-filter:blur(10px);transition:background 0.3s,box-shadow 0.3s;cursor:pointer;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.1)}
+.service-card:hover{background:rgba(255,255,255,0.1);box-shadow:0 20px 30px rgba(0,0,0,0.3)}
+.service-card::before{content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.15),transparent);transform:rotate(45deg);opacity:0;transition:opacity 0.3s}
+.service-card:hover::before{opacity:1}
+.service-card i{font-size:clamp(2rem,6vw,3rem);margin-bottom:1rem;color:var(--primary)}
+.service-card h3{margin-bottom:0.75rem;font-size:1.5rem}
+.service-card p{font-size:0.95rem;line-height:1.4}
+.modal{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:3500;opacity:0;visibility:hidden;transition:opacity 0.3s}
+.modal.active{opacity:1;visibility:visible}
+.modal-content{background:var(--card-bg);padding:2rem;border-radius:15px;max-width:600px;width:90%;position:relative;text-align:left}
+.modal-close{position:absolute;top:10px;right:10px;font-size:1.5rem;cursor:pointer;color:var(--text)}
+#como-funciona{background:rgba(0,0,0,0.15);border-radius:15px;padding:4rem 2rem;box-shadow:0 5px 15px rgba(0,0,0,0.2)}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem}
+.info-card{background:var(--card-bg);padding:2rem;border-left:4px solid var(--primary);border-radius:8px;backdrop-filter:blur(10px);transition:transform 0.3s,box-shadow 0.3s}
+.info-card:hover{transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,0.25)}
+.info-card h3{margin-bottom:1rem;font-size:1.5rem;color:var(--primary)}
+.info-card p{font-size:1rem;line-height:1.6}
+#sobre .about-content{max-width:900px;margin:auto;background:rgba(0,0,0,0.15);padding:2rem;border-radius:15px;box-shadow:0 4px 8px rgba(0,0,0,0.2)}
+#sobre .about-content p{margin-bottom:1.5rem;font-size:1.1rem;line-height:1.6}
+#testemunhos{background:rgba(0,0,0,0.1);border-radius:15px;padding:4rem 1rem}
+#testemunhos .splide{max-width:800px;margin:auto}
+.splide__slide{display:flex;align-items:center;justify-content:center;padding:2rem}
+.testimonial{background:var(--card-bg);padding:2rem;border-radius:15px;text-align:center;backdrop-filter:blur(10px);transition:transform 0.3s,box-shadow 0.3s;max-width:600px;width:100%;margin:auto}
+.testimonial:hover{transform:scale(1.03);box-shadow:0 15px 25px rgba(0,0,0,0.3)}
+.testimonial p{font-style:italic;margin-bottom:1.5rem;font-size:1.1rem;line-height:1.6}
+.testimonial h4{font-weight:600;margin-bottom:0.25rem}
+.testimonial span{font-size:0.9rem;color:var(--secondary)}
+.contact-card{max-width:600px;margin:auto;background:var(--card-bg);padding:2rem;border-radius:15px;backdrop-filter:blur(10px);text-align:center;transition:transform 0.3s,box-shadow 0.3s}
+.contact-card:hover{transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,0.25)}
+.contact-card a{color:var(--primary);text-decoration:none;border-bottom:1px solid var(--primary);transition:color 0.3s,border-color 0.3s}
+.contact-card a:hover{color:var(--accent);border-color:var(--accent)}
+footer{background:rgba(26,26,26,0.95);padding:2rem;text-align:center;color:var(--text)}
+footer p{font-size:0.9rem}
+.floating{animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+@media (max-width:480px){.nav{padding:1rem} section{padding:4rem 1rem} .theme-toggle-label{width:50px;height:28px} .theme-toggle-label .theme-toggle-slider:before{height:22px;width:22px;left:3px;bottom:3px}}
+@media (min-width:1200px){.services-grid .top-services{gap:2rem} .info-grid{gap:2rem}}
+body.light-theme{--dark:#ffffff;--light:#333333;--text:#333333;--bg-gradient:linear-gradient(135deg,#f8f9fa,#e9ecef);--card-bg:rgba(0,0,0,0.03)}
+body.light-theme .nav{background:#e0e0e0}
+body.light-theme .mobile-menu{background:#f8f9fa}
+</style>
 </head>
 <body>
-  <!-- Indicador de Progresso -->
-  <div id="scroll-progress"></div>
-  
-  <!-- Botão Voltar ao Topo -->
-  <div id="back-to-top"><i class="fas fa-chevron-up"></i></div>
-  
-  <!-- Loading Screen -->
-  <div id="loading">
-    <div class="loader-container">
-      <div class="loader-ring"></div>
-      <div class="orbit-container">
-        <div class="loader-dot"></div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Navegação Principal -->
-  <nav class="nav">
-    <div class="nav-logo">Freela Sells</div>
-    <div class="theme-toggle-container">
-      <label class="theme-toggle-label">
-        <input type="checkbox" id="theme-toggle-checkbox">
-        <span class="theme-toggle-slider"></span>
-        <i class="fas fa-moon moon-icon"></i>
-        <i class="fas fa-sun sun-icon"></i>
-      </label>
-    </div>
-    <div class="nav-links">
-      <a href="#servicos" class="nav-link">Serviços</a>
-      <a href="#sobre" class="nav-link">Sobre</a>
-      <a href="#como-funciona" class="nav-link">Como Funciona</a>
-      <a href="#testemunhos" class="nav-link">Testemunhos</a>
-      <a href="#contato" class="nav-link">Contato</a>
-    </div>
-    <div class="hamburger">
-      <i class="fas fa-bars"></i>
-    </div>
-  </nav>
-  
-  <!-- Menu Mobile -->
-  <div id="mobile-menu" class="mobile-menu">
-    <div class="mobile-menu-close">
-      <i class="fas fa-times"></i>
-    </div>
-    <a href="#servicos" class="nav-link">Serviços</a>
-    <a href="#sobre" class="nav-link">Sobre</a>
-    <a href="#como-funciona" class="nav-link">Como Funciona</a>
-    <a href="#testemunhos" class="nav-link">Testemunhos</a>
-    <a href="#contato" class="nav-link">Contato</a>
-  </div>
-  
-  <!-- Seção Hero com Efeito Typed.js e Particles/Vanta -->
-  <section class="hero">
-    <div id="particles-js"></div>
-    <div class="hero-content" data-aos="fade-up">
-      <h1 id="typed-text"></h1>
-      <p>Conectando talentos extraordinários a oportunidades incríveis no Discord.</p>
-      <button class="btn" onclick="document.querySelector('#contato').scrollIntoView({behavior:'smooth'})">Junte-se a Nós</button>
-    </div>
-  </section>
-  
-  <!-- Seção de Serviços -->
-  <section id="servicos">
-    <h2 class="section-title" data-aos="fade-up">Nossos Serviços</h2>
-    <p class="section-subtitle" data-aos="fade-up" data-aos-delay="200">
-      De otimização de computadores a design gráfico, oferecemos soluções completas para seus desafios.
-    </p>
-    <div class="services-grid">
-      <div class="top-services">
-        <div class="service-card floating" data-aos="fade-up" data-service="Otimização de Computadores" data-description="Melhore o desempenho do seu equipamento com técnicas avançadas e suporte especializado.">
-          <i class="fas fa-desktop"></i>
-          <h3>Otimização de Computadores</h3>
-          <p>Melhore o desempenho do seu equipamento com técnicas avançadas e suporte especializado.</p>
-        </div>
-        <div class="service-card floating" data-aos="fade-up" data-aos-delay="100" data-service="Ilustração Vetorial" data-description="Arte digital com alta qualidade e precisão, ideal para marcas e projetos criativos.">
-          <i class="fas fa-pen-nib"></i>
-          <h3>Ilustração Vetorial</h3>
-          <p>Arte digital com alta qualidade e precisão, ideal para marcas e projetos criativos.</p>
-        </div>
-        <div class="service-card floating" data-aos="fade-up" data-aos-delay="200" data-service="Design Gráfico" data-description="Criação de thumbnails, portraits e projetos gráficos que elevam sua identidade visual.">
-          <i class="fas fa-palette"></i>
-          <h3>Design Gráfico</h3>
-          <p>Criação de thumbnails, portraits e projetos gráficos que elevam sua identidade visual.</p>
-        </div>
-        <div class="service-card floating" data-aos="fade-up" data-aos-delay="300" data-service="WebDesign" data-description="Desenvolvimento de sites modernos, responsivos e com uma experiência única de usuário.">
-          <i class="fas fa-code"></i>
-          <h3>WebDesign</h3>
-          <p>Desenvolvimento de sites modernos, responsivos e com uma experiência única de usuário.</p>
-        </div>
-        <div class="service-card floating" data-aos="fade-up" data-aos-delay="400" data-service="Edição de Vídeo" data-description="Edições dinâmicas e criativas para transformar seus vídeos em verdadeiras obras de arte.">
-          <i class="fas fa-video"></i>
-          <h3>Edição de Vídeo</h3>
-          <p>Edições dinâmicas e criativas para transformar seus vídeos em verdadeiras obras de arte.</p>
-        </div>
-      </div>
-      <div class="bottom-services">
-        <div class="service-card floating" data-aos="fade-up" data-aos-delay="500" data-service="Interfaces Modernas" data-description="Criamos interfaces intuitivas e elegantes que proporcionam uma experiência de uso impecável.">
-          <i class="fas fa-layer-group"></i>
-          <h3>Interfaces Modernas</h3>
-          <p>Criamos interfaces intuitivas e elegantes que proporcionam uma experiência de uso impecável.</p>
-        </div>
-        <div class="service-card floating" data-aos="fade-up" data-aos-delay="600" data-service="Consultoria e Suporte" data-description="Conte com nossa consultoria personalizada para impulsionar seus projetos e solucionar desafios.">
-          <i class="fas fa-comments"></i>
-          <h3>Consultoria e Suporte</h3>
-          <p>Conte com nossa consultoria personalizada para impulsionar seus projetos e solucionar desafios.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Modal de Detalhes dos Serviços -->
-  <div id="service-modal" class="modal">
-    <div class="modal-content" data-aos="zoom-in">
-      <span class="modal-close"><i class="fas fa-times"></i></span>
-      <h2 id="modal-service-title"></h2>
-      <p id="modal-service-description"></p>
-    </div>
-  </div>
-  
-  <!-- Seção Sobre -->
-  <section id="sobre">
-    <h2 class="section-title" data-aos="fade-up">Sobre a Freela Sell's</h2>
-    <div class="about-content" data-aos="fade-up" data-aos-delay="200">
-      <p>A Freela Sell's é mais do que uma simples plataforma – é um ponto de encontro para designers, freelancers, clientes e profissionais de diversas áreas se conectarem e realizarem projetos inovadores.</p>
-      <p>Somos uma comunidade vibrante e dedicada, empenhada em oferecer serviços de alta qualidade e atendimento personalizado. Nossa missão é liderar o mercado de freelance "informal" no Discord, conectando talentos de todo o mundo e proporcionando experiências transformadoras.</p>
-    </div>
-  </section>
-  
-  <!-- Seção "Como Funciona" -->
-  <section id="como-funciona">
-    <h2 class="section-title" data-aos="fade-up">Como Funciona</h2>
-    <div class="info-grid">
-      <div class="info-card" data-aos="fade-up">
-        <h3>Equipe Dedicada</h3>
-        <p>Nossa equipe especializada atua como elo entre você e os melhores profissionais. Conosco, seu projeto é tratado com atenção e expertise.</p>
-      </div>
-      <div class="info-card" data-aos="fade-up" data-aos-delay="150">
-        <h3>Interação Simplificada</h3>
-        <p>Converse diretamente com nossos profissionais através dos chats dedicados no Discord. Sem burocracia, sem complicações.</p>
-      </div>
-      <div class="info-card" data-aos="fade-up" data-aos-delay="300">
-        <h3>Segurança e Sigilo</h3>
-        <p>Com o respaldo do Grupo aMathyzin, garantimos que todas as transações sejam protegidas, mantendo seus dados em total sigilo.</p>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Seção de Testemunhos -->
-  <section id="testemunhos">
-    <h2 class="section-title" data-aos="fade-up">O Que Dizem Nossos Clientes</h2>
-    <p class="section-subtitle" data-aos="fade-up" data-aos-delay="200">
-      Depoimentos reais de clientes que transformaram suas ideias em realidade com a gente.
-    </p>
-    <div class="splide" id="testimonial-slider" data-aos="fade-up">
-      <div class="splide__track">
-        <ul class="splide__list">
-          <li class="splide__slide">
-            <div class="testimonial">
-              <p>"A Freela Sell's me conectou com profissionais incríveis que levaram meu projeto para o próximo nível. Atendimento rápido e de altíssima qualidade!"</p>
-              <h4>Mariana Silva</h4>
-              <span>Empreendedora Digital</span>
-            </div>
-          </li>
-          <li class="splide__slide">
-            <div class="testimonial">
-              <p>"Nunca imaginei encontrar uma comunidade tão dinâmica e profissional no Discord. Recomendo a todos que buscam inovação e criatividade."</p>
-              <h4>Rafael Costa</h4>
-              <span>Designer Gráfico</span>
-            </div>
-          </li>
-          <li class="splide__slide">
-            <div class="testimonial">
-              <p>"A abordagem direta e sem burocracia fez toda a diferença. Meu serviço foi entregue com excelência e segurança. Estou muito satisfeito!"</p>
-              <h4>Luana Pereira</h4>
-              <span>Empresária</span>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Seção de Contato -->
-  <section id="contato">
-    <h2 class="section-title" data-aos="fade-up">Entre em Contato</h2>
-    <div class="contact-card" data-aos="fade-up" data-aos-delay="200">
-      <p>Quer saber mais, negociar um serviço ou simplesmente bater um papo? Fale conosco através do nosso Discord ou envie um e-mail.</p>
-      <p><i class="fab fa-discord"></i> <a href="https://discord.gg/seulink" target="_blank">Acesse nosso Discord</a></p>
-      <p><i class="fas fa-envelope"></i> <a href="mailto:contato@freelasells.com">contato@freelasells.com</a></p>
-    </div>
-  </section>
-  
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 Freela Sells. Todos os direitos reservados.</p>
-    <p>Desenvolvido com paixão e dedicação pelo Grupo aMathyzin.</p>
-  </footer>
-  
-  <!-- Scripts - Bibliotecas e Frameworks -->
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- Lodash -->
-  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-  <!-- Bootstrap Bundle (inclui Popper) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- Three.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <!-- GSAP e ScrollTrigger -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <!-- AOS -->
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <!-- particlesJS -->
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <!-- Vanta.FOG -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.21/vanta.fog.min.js"></script>
-  <!-- Typed.js -->
-  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-  <!-- Splide.js -->
-  <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script>
-  <!-- SweetAlert2 (para alertas bonitos) -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  
-  <!-- Custom Scripts -->
-  <script>
-    // Variável global para o efeito Vanta
-    let vantaEffect = null;
-    
-    // Inicializa o fundo com base no tema atual
-    function initBackground() {
-      if(vantaEffect) {
-        vantaEffect.destroy();
-        vantaEffect = null;
-      }
-      if(window.pJSDom && window.pJSDom.length > 0) {
-        window.pJSDom[0].pJS.fn.vendors.destroy();
-        document.getElementById('particles-js').innerHTML = "";
-      }
-      if(document.body.classList.contains('light-theme')){
-        // Tema claro: utiliza Vanta.FOG com cores azuladas
-        vantaEffect = VANTA.FOG({
-          el: "#particles-js",
-          mouseControls: true,
-          touchControls: true,
-          gyroControls: false,
-          highlightColor: 0xadd8e6,
-          midtoneColor: 0x87cefa,
-          lowlightColor: 0x4682b4,
-          baseColor: 0x1e90ff,
-          speed: 1.0,
-          zoom: 1.0
-        });
-      } else {
-        // Tema escuro: utiliza particlesJS
-        particlesJS("particles-js", {
-          "particles": {
-            "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
-            "color": { "value": "#ffffff" },
-            "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 } },
-            "opacity": { "value": 0.5, "random": false },
-            "size": { "value": 3, "random": true },
-            "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.4, "width": 1 },
-            "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "bounce": false }
-          },
-          "interactivity": {
-            "detect_on": "canvas",
-            "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
-            "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 1 } }, "push": { "particles_nb": 4 } }
-          },
-          "retina_detect": true
-        });
-      }
-    }
-    
-    // Função de alerta extra com SweetAlert2 (exemplo)
-    function showAlert(message, type = 'success') {
-      Swal.fire({
-        icon: type,
-        title: message,
-        showConfirmButton: false,
-        timer: 1500
-      });
-    }
-    
-    // Após o carregamento da página
-    window.addEventListener('load', () => {
-      gsap.to('#loading', {
-        opacity: 0,
-        delay: 3,
-        duration: 0.5,
-        onComplete: () => { document.getElementById('loading').style.display = 'none'; }
-      });
-      AOS.init({ duration: 1000, once: true });
-      initBackground();
-      
-      // Efeito de digitação no hero com Typed.js
-      new Typed('#typed-text', {
-        strings: ["Freela Sells", "Conectando Talentos", "Transformando Projetos"],
-        typeSpeed: 100,
-        backSpeed: 50,
-        loop: true
-      });
-      
-      // Inicializa o slider de depoimentos com Splide
-      new Splide('#testimonial-slider', {
-        type   : 'loop',
-        perPage: 1,
-        autoplay: true,
-        interval: 5000,
-        pauseOnHover: true
-      }).mount();
-      
-      // Efeito Ripple nos botões
-      document.querySelectorAll('.btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-          let ripple = document.createElement('span');
-          ripple.classList.add('ripple');
-          this.appendChild(ripple);
-          let rect = this.getBoundingClientRect();
-          let size = Math.max(rect.width, rect.height);
-          ripple.style.width = ripple.style.height = size + 'px';
-          ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
-          ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
-          ripple.addEventListener('animationend', () => {
-            ripple.remove();
-          });
-        });
-      });
-      
-      // Animação nos links de navegação com GSAP
-      document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('mouseenter', () => {
-          gsap.to(link, { scale: 1.1, duration: 0.3, ease: "power2.out" });
-        });
-        link.addEventListener('mouseleave', () => {
-          gsap.to(link, { scale: 1, duration: 0.3, ease: "power2.out" });
-        });
-      });
-    });
-    
-    // Alternar tema (Light/Dark)
-    document.getElementById('theme-toggle-checkbox').addEventListener('change', function() {
-      if(this.checked){
-        document.body.classList.add('light-theme');
-      } else {
-        document.body.classList.remove('light-theme');
-      }
-      initBackground();
-      // Exemplo: alerta ao mudar o tema
-      showAlert("Tema alterado!");
-    });
-    
-    // Interação nos cards de serviço: exibe modal com mais detalhes e animações
-    document.querySelectorAll('.service-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const title = card.getAttribute('data-service');
-        const description = card.getAttribute('data-description');
-        document.getElementById('modal-service-title').innerText = title;
-        document.getElementById('modal-service-description').innerText = description;
-        document.getElementById('service-modal').classList.add('active');
-        gsap.fromTo('.modal-content', { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "power2.out" });
-      });
-      card.addEventListener('mousemove', e => {
-        let rect = card.getBoundingClientRect();
-        let x = e.clientX - rect.left;
-        let y = e.clientY - rect.top;
-        gsap.to(card, { 
-          rotationX: (y - rect.height / 2) / 10, 
-          rotationY: -(x - rect.width / 2) / 10, 
-          scale: 1.05, 
-          transformPerspective: 1000, 
-          ease: "power2.out", 
-          duration: 0.3 
-        });
-      });
-      card.addEventListener('mouseleave', () => {
-        gsap.to(card, { rotationX: 0, rotationY: 0, scale: 1, ease: "power2.out", duration: 0.5 });
-      });
-    });
-    
-    // Fechar modal
-    document.querySelector('.modal-close').addEventListener('click', () => {
-      document.getElementById('service-modal').classList.remove('active');
-    });
-    
-    // Menu mobile
-    const hamburger = document.querySelector('.hamburger');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileMenuClose = document.querySelector('.mobile-menu-close');
-    hamburger.addEventListener('click', () => { mobileMenu.style.display = 'flex'; });
-    mobileMenuClose.addEventListener('click', () => { mobileMenu.style.display = 'none'; });
-    document.querySelectorAll('.mobile-menu a').forEach(link => {
-      link.addEventListener('click', () => { mobileMenu.style.display = 'none'; });
-    });
-    
-    // Botão voltar ao topo e atualização do indicador de scroll
-    const backToTop = document.getElementById('back-to-top');
-    window.addEventListener('scroll', () => {
-      if(window.scrollY > 300){
-        backToTop.style.display = 'block';
-      } else {
-        backToTop.style.display = 'none';
-      }
-      const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-      document.getElementById('scroll-progress').style.width = scrollPercent + '%';
-    });
-    backToTop.addEventListener('click', () => {
-      window.scrollTo({top: 0, behavior: 'smooth'});
-    });
-    
-    // Scroll detection para efeito de brilho e fade na custom scrollbar
-    let scrollTimeout;
-    window.addEventListener('scroll', function() {
-      document.body.classList.add('scrolling');
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        document.body.classList.remove('scrolling');
-      }, 150);
-    });
-  </script>
+<div id="scroll-progress"></div>
+<div id="back-to-top"><i class="fas fa-chevron-up"></i></div>
+<div id="loading">
+<div class="loader-container">
+<div class="loader-ring"></div>
+<div class="orbit-container">
+<div class="loader-dot"></div>
+</div>
+</div>
+</div>
+<nav class="nav">
+<div class="nav-logo">Freela Sells</div>
+<div class="nav-right">
+<div class="theme-toggle-container">
+<label class="theme-toggle-label">
+<input type="checkbox" id="theme-toggle-checkbox">
+<span class="theme-toggle-slider"></span>
+<i class="fas fa-moon moon-icon"></i>
+<i class="fas fa-sun sun-icon"></i>
+</label>
+</div>
+<div class="hamburger">
+<i class="fas fa-bars"></i>
+</div>
+</div>
+<div class="nav-links">
+<a href="#servicos" class="nav-link">Serviços</a>
+<a href="#sobre" class="nav-link">Sobre</a>
+<a href="#como-funciona" class="nav-link">Como Funciona</a>
+<a href="#testemunhos" class="nav-link">Testemunhos</a>
+<a href="#contato" class="nav-link">Contato</a>
+</div>
+</nav>
+<div id="mobile-menu" class="mobile-menu">
+<div class="mobile-menu-close">
+<i class="fas fa-times"></i>
+</div>
+<a href="#servicos" class="nav-link">Serviços</a>
+<a href="#sobre" class="nav-link">Sobre</a>
+<a href="#como-funciona" class="nav-link">Como Funciona</a>
+<a href="#testemunhos" class="nav-link">Testemunhos</a>
+<a href="#contato" class="nav-link">Contato</a>
+</div>
+<section class="hero">
+<div id="particles-js"></div>
+<div class="hero-content" data-aos="fade-up">
+<h1 id="typed-text"></h1>
+<p>Conectando talentos extraordinários a oportunidades incríveis no Discord.</p>
+<button class="btn" onclick="document.querySelector('#contato').scrollIntoView({behavior:'smooth'})">Junte-se a Nós</button>
+</div>
+</section>
+<section id="servicos">
+<h2 class="section-title" data-aos="fade-up">Nossos Serviços</h2>
+<p class="section-subtitle" data-aos="fade-up" data-aos-delay="200">De otimização de computadores a design gráfico, oferecemos soluções completas para seus desafios.</p>
+<div class="services-grid">
+<div class="top-services">
+<div class="service-card floating" data-aos="fade-up" data-service="Otimização de Computadores" data-description="Melhore o desempenho do seu equipamento com técnicas avançadas e suporte especializado.">
+<i class="fas fa-desktop"></i>
+<h3>Otimização de Computadores</h3>
+<p>Melhore o desempenho do seu equipamento com técnicas avançadas e suporte especializado.</p>
+</div>
+<div class="service-card floating" data-aos="fade-up" data-aos-delay="100" data-service="Ilustração Vetorial" data-description="Arte digital com alta qualidade e precisão, ideal para marcas e projetos criativos.">
+<i class="fas fa-pen-nib"></i>
+<h3>Ilustração Vetorial</h3>
+<p>Arte digital com alta qualidade e precisão, ideal para marcas e projetos criativos.</p>
+</div>
+<div class="service-card floating" data-aos="fade-up" data-aos-delay="200" data-service="Design Gráfico" data-description="Criação de thumbnails, portraits e projetos gráficos que elevam sua identidade visual.">
+<i class="fas fa-palette"></i>
+<h3>Design Gráfico</h3>
+<p>Criação de thumbnails, portraits e projetos gráficos que elevam sua identidade visual.</p>
+</div>
+<div class="service-card floating" data-aos="fade-up" data-aos-delay="300" data-service="WebDesign" data-description="Desenvolvimento de sites modernos, responsivos e com uma experiência única de usuário.">
+<i class="fas fa-code"></i>
+<h3>WebDesign</h3>
+<p>Desenvolvimento de sites modernos, responsivos e com uma experiência única de usuário.</p>
+</div>
+<div class="service-card floating" data-aos="fade-up" data-aos-delay="400" data-service="Edição de Vídeo" data-description="Edições dinâmicas e criativas para transformar seus vídeos em verdadeiras obras de arte.">
+<i class="fas fa-video"></i>
+<h3>Edição de Vídeo</h3>
+<p>Edições dinâmicas e criativas para transformar seus vídeos em verdadeiras obras de arte.</p>
+</div>
+</div>
+<div class="bottom-services">
+<div class="service-card floating" data-aos="fade-up" data-aos-delay="500" data-service="Interfaces Modernas" data-description="Criamos interfaces intuitivas e elegantes que proporcionam uma experiência de uso impecável.">
+<i class="fas fa-layer-group"></i>
+<h3>Interfaces Modernas</h3>
+<p>Criamos interfaces intuitivas e elegantes que proporcionam uma experiência de uso impecável.</p>
+</div>
+<div class="service-card floating" data-aos="fade-up" data-aos-delay="600" data-service="Consultoria e Suporte" data-description="Conte com nossa consultoria personalizada para impulsionar seus projetos e solucionar desafios.">
+<i class="fas fa-comments"></i>
+<h3>Consultoria e Suporte</h3>
+<p>Conte com nossa consultoria personalizada para impulsionar seus projetos e solucionar desafios.</p>
+</div>
+</div>
+</div>
+</section>
+<div id="service-modal" class="modal">
+<div class="modal-content" data-aos="zoom-in">
+<span class="modal-close"><i class="fas fa-times"></i></span>
+<h2 id="modal-service-title"></h2>
+<p id="modal-service-description"></p>
+</div>
+</div>
+<section id="sobre">
+<h2 class="section-title" data-aos="fade-up">Sobre a Freela Sell's</h2>
+<div class="about-content" data-aos="fade-up" data-aos-delay="200">
+<p>A Freela Sell's é mais do que uma simples plataforma – é um ponto de encontro para designers, freelancers, clientes e profissionais de diversas áreas se conectarem e realizarem projetos inovadores.</p>
+<p>Somos uma comunidade vibrante e dedicada, empenhada em oferecer serviços de alta qualidade e atendimento personalizado. Nossa missão é liderar o mercado de freelance "informal" no Discord, conectando talentos de todo o mundo e proporcionando experiências transformadoras.</p>
+</div>
+</section>
+<section id="como-funciona">
+<h2 class="section-title" data-aos="fade-up">Como Funciona</h2>
+<div class="info-grid">
+<div class="info-card" data-aos="fade-up">
+<h3>Equipe Dedicada</h3>
+<p>Nossa equipe especializada atua como elo entre você e os melhores profissionais. Conosco, seu projeto é tratado com atenção e expertise.</p>
+</div>
+<div class="info-card" data-aos="fade-up" data-aos-delay="150">
+<h3>Interação Simplificada</h3>
+<p>Converse diretamente com nossos profissionais através dos chats dedicados no Discord. Sem burocracia, sem complicações.</p>
+</div>
+<div class="info-card" data-aos="fade-up" data-aos-delay="300">
+<h3>Segurança e Sigilo</h3>
+<p>Com o respaldo do Grupo aMathyzin, garantimos que todas as transações sejam protegidas, mantendo seus dados em total sigilo.</p>
+</div>
+</div>
+</section>
+<section id="testemunhos">
+<h2 class="section-title" data-aos="fade-up">O Que Dizem Nossos Clientes</h2>
+<p class="section-subtitle" data-aos="fade-up" data-aos-delay="200">Depoimentos reais de clientes que transformaram suas ideias em realidade com a gente.</p>
+<div class="splide" id="testimonial-slider" data-aos="fade-up">
+<div class="splide__track">
+<ul class="splide__list">
+<li class="splide__slide">
+<div class="testimonial">
+<p>"A Freela Sell's me conectou com profissionais incríveis que levaram meu projeto para o próximo nível. Atendimento rápido e de altíssima qualidade!"</p>
+<h4>Mariana Silva</h4>
+<span>Empreendedora Digital</span>
+</div>
+</li>
+<li class="splide__slide">
+<div class="testimonial">
+<p>"Nunca imaginei encontrar uma comunidade tão dinâmica e profissional no Discord. Recomendo a todos que buscam inovação e criatividade."</p>
+<h4>Rafael Costa</h4>
+<span>Designer Gráfico</span>
+</div>
+</li>
+<li class="splide__slide">
+<div class="testimonial">
+<p>"A abordagem direta e sem burocracia fez toda a diferença. Meu serviço foi entregue com excelência e segurança. Estou muito satisfeito!"</p>
+<h4>Luana Pereira</h4>
+<span>Empresária</span>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="contato">
+<h2 class="section-title" data-aos="fade-up">Entre em Contato</h2>
+<div class="contact-card" data-aos="fade-up" data-aos-delay="200">
+<p>Quer saber mais, negociar um serviço ou simplesmente bater um papo? Fale conosco através do nosso Discord ou envie um e-mail.</p>
+<p><i class="fab fa-discord"></i> <a href="https://discord.gg/seulink" target="_blank">Acesse nosso Discord</a></p>
+<p><i class="fas fa-envelope"></i> <a href="mailto:contato@freelasells.com">contato@freelasells.com</a></p>
+</div>
+</section>
+<footer>
+<p>&copy; 2025 Freela Sells. Todos os direitos reservados.</p>
+<p>Desenvolvido com paixão e dedicação pelo Grupo aMathyzin.</p>
+</footer>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.21/vanta.fog.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@latest/dist/js/splide.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+let vantaEffect=null;
+function initBackground(){
+if(vantaEffect){vantaEffect.destroy();vantaEffect=null}
+if(window.pJSDom&&window.pJSDom.length>0){window.pJSDom[0].pJS.fn.vendors.destroy();document.getElementById('particles-js').innerHTML=""}
+if(document.body.classList.contains('light-theme')){
+vantaEffect=VANTA.FOG({el:"#particles-js",mouseControls:true,touchControls:true,gyroControls:false,highlightColor:0xadd8e6,midtoneColor:0x87cefa,lowlightColor:0x4682b4,baseColor:0x1e90ff,speed:1.0,zoom:1.0})
+}else{
+particlesJS("particles-js",{"particles":{"number":{"value":80,"density":{"enable":true,"value_area":800}},"color":{"value":"#ffffff"},"shape":{"type":"circle","stroke":{"width":0,"color":"#000000"},"polygon":{"nb_sides":5}},"opacity":{"value":0.5,"random":false},"size":{"value":3,"random":true},"line_linked":{"enable":true,"distance":150,"color":"#ffffff","opacity":0.4,"width":1},"move":{"enable":true,"speed":2,"direction":"none","random":false,"straight":false,"bounce":false}},"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":true,"mode":"grab"},"onclick":{"enable":true,"mode":"push"},"resize":true},"modes":{"grab":{"distance":140,"line_linked":{"opacity":1}},"push":{"particles_nb":4}}},"retina_detect":true})
+}}
+function showAlert(message,type="success"){
+Swal.fire({icon:type,title:message,showConfirmButton:false,timer:1500})
+}
+window.addEventListener('load',()=>{
+gsap.to('#loading',{opacity:0,delay:3,duration:0.5,onComplete:()=>{document.getElementById('loading').style.display='none'}})
+AOS.init({duration:1000,once:true})
+initBackground()
+new Typed('#typed-text',{strings:["Freela Sells","Conectando Talentos","Transformando Projetos"],typeSpeed:100,backSpeed:50,loop:true})
+new Splide('#testimonial-slider',{type:'loop',perPage:1,autoplay:true,interval:5000,pauseOnHover:true}).mount()
+document.querySelectorAll('.btn').forEach(btn=>{
+btn.addEventListener('click',function(e){
+let ripple=document.createElement('span');
+ripple.classList.add('ripple');
+this.appendChild(ripple);
+let rect=this.getBoundingClientRect();
+let size=Math.max(rect.width,rect.height);
+ripple.style.width=ripple.style.height=size+'px';
+ripple.style.left=(e.clientX-rect.left-size/2)+'px';
+ripple.style.top=(e.clientY-rect.top-size/2)+'px';
+ripple.addEventListener('animationend',()=>{ripple.remove()})
+})
+})
+document.querySelectorAll('.nav-link').forEach(link=>{
+link.addEventListener('mouseenter',()=>{gsap.to(link,{scale:1.1,duration:0.3,ease:"power2.out"})})
+link.addEventListener('mouseleave',()=>{gsap.to(link,{scale:1,duration:0.3,ease:"power2.out"})})
+})
+})
+document.getElementById('theme-toggle-checkbox').addEventListener('change',function(){
+if(this.checked){document.body.classList.add('light-theme')}else{document.body.classList.remove('light-theme')}
+initBackground()
+showAlert("Tema alterado!")
+})
+document.querySelectorAll('.service-card').forEach(card=>{
+card.addEventListener('click',()=>{
+const title=card.getAttribute('data-service')
+const description=card.getAttribute('data-description')
+document.getElementById('modal-service-title').innerText=title
+document.getElementById('modal-service-description').innerText=description
+document.getElementById('service-modal').classList.add('active')
+gsap.fromTo('.modal-content',{scale:0.8,opacity:0},{scale:1,opacity:1,duration:0.5,ease:"power2.out"})
+})
+card.addEventListener('mousemove',e=>{
+let rect=card.getBoundingClientRect();
+let x=e.clientX-rect.left;
+let y=e.clientY-rect.top;
+gsap.to(card,{rotationX:(y-rect.height/2)/10,rotationY:-(x-rect.width/2)/10,scale:1.05,transformPerspective:1000,ease:"power2.out",duration:0.3})
+})
+card.addEventListener('mouseleave',()=>{
+gsap.to(card,{rotationX:0,rotationY:0,scale:1,ease:"power2.out",duration:0.5})
+})
+})
+document.querySelector('.modal-close').addEventListener('click',()=>{
+document.getElementById('service-modal').classList.remove('active')
+})
+const hamburger=document.querySelector('.hamburger');
+const mobileMenu=document.getElementById('mobile-menu');
+const mobileMenuClose=document.querySelector('.mobile-menu-close');
+hamburger.addEventListener('click',()=>{mobileMenu.style.display='flex'})
+mobileMenuClose.addEventListener('click',()=>{mobileMenu.style.display='none'})
+document.querySelectorAll('.mobile-menu a').forEach(link=>{
+link.addEventListener('click',()=>{mobileMenu.style.display='none'})
+})
+const backToTop=document.getElementById('back-to-top');
+window.addEventListener('scroll',()=>{
+if(window.scrollY>300){backToTop.style.display='block'}else{backToTop.style.display='none'}
+const scrollPercent=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
+document.getElementById('scroll-progress').style.width=scrollPercent+'%'
+})
+backToTop.addEventListener('click',()=>{window.scrollTo({top:0,behavior:'smooth'})})
+let scrollTimeout;
+window.addEventListener('scroll',function(){
+document.body.classList.add('scrolling');
+clearTimeout(scrollTimeout);
+scrollTimeout=setTimeout(()=>{document.body.classList.remove('scrolling')},150)
+})
+</script>
+<script src="https://amathyzin.com/scripts/smooth-scroll.js"></script>
 </body>
 </html>
